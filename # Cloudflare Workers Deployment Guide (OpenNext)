@@ -1,0 +1,57 @@
+# Cloudflare Workers Deployment Guide (OpenNext)  
+
+This project is configured for deployment to **Cloudflare Workers** using the official `@opennextjs/cloudflare` adapter and `wrangler`.
+
+---
+
+## 1. Cloudflare Workers Builds Configuration
+
+In the Cloudflare Dashboard (**Workers & Pages -> Create Application -> Git Connection**):
+
+| Setting | Value |
+| :--- | :--- |
+| **Framework preset** | `None` / `Next.js (OpenNext)` |
+| **Build command** | `npx @opennextjs/cloudflare build` |
+| **Deploy command** | `npx wrangler deploy` |
+| **Root directory** | `/` (Project root) |
+
+---
+
+## 2. Environment Variables & Secrets
+
+Environment variables and secrets **do NOT transfer automatically** from local `.env` files or GitHub repository settings. You MUST configure them manually in the Cloudflare Dashboard:
+
+> **Cloudflare Dashboard Path**: `Workers & Pages` → Select worker (`upforge-india`) → `Settings` → `Variables and Secrets`
+
+### Required Environment Variables
+
+| Variable Name | Description | Used In |
+| :--- | :--- | :--- |
+| `GROQ_API_KEY` | Groq AI API key for fast inference | `/app/api/chat/route.ts`, `/lib/fallback-ai.ts`, `/app/industries/page.tsx` |
+| `GEMINI_API_KEY` | Google Gemini API key for fallback inference | `/app/api/chat/route.ts`, `/lib/fallback-ai.ts`, `/app/industries/page.tsx` |
+| `OPENAI_API_KEY` | OpenAI API key for fallback inference | `/lib/fallback-ai.ts` |
+
+---
+
+## 3. Local Development & Preview Commands
+
+- **Preview Cloudflare Build Locally**:
+  ```bash
+  pnpm preview
+  ```
+- **Deploy to Cloudflare via CLI**:
+  ```bash
+  pnpm deploy
+  ```
+- **Generate Cloudflare Environment TypeScript Types**:
+  ```bash
+  pnpm cf-typegen
+  ```
+
+---
+
+## 4. Key Files Reference
+
+- `wrangler.jsonc`: Cloudflare Worker configuration (`nodejs_compat` enabled, `.open-next/worker.js` entrypoint, `.open-next/assets` static assets binding).
+- `open-next.config.ts`: OpenNext build pipeline config.
+- `package.json`: Contains build scripts for standard Next.js compilation and OpenNext Workers builds.
