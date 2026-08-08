@@ -1,3 +1,4 @@
+// app/newsletter/page.tsx — UpForge Weekly Dispatch Subscription
 "use client";
 
 import { useState } from "react";
@@ -9,8 +10,10 @@ import {
   Mail,
   Zap,
   Globe,
-  ArrowLeft,
+  Sparkles,
+  Check
 } from "lucide-react";
+import { Navbar } from "@/components/navbar";
 
 export default function NewsletterPage() {
   const [email, setEmail] = useState("");
@@ -31,160 +34,153 @@ export default function NewsletterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-accent selection:text-background">
-      <div className="max-w-[1100px] mx-auto px-6 lg:px-12 pt-10 pb-24">
-
-        {/* HEADER */}
-        <section className="border-b border-border max-w-[1300px] mx-auto w-full mt-5 pb-6 flex flex-col items-center text-center">
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-background text-foreground font-serif selection:bg-[#C59A2E]/20">
+        
+        {/* MASTHEAD */}
+        <section className="border-b-[2px] border-foreground max-w-[1200px] mx-auto px-4 md:px-8 pt-10 pb-10 text-center flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-muted border border-[#C59A2E]/40 mb-4">
+            <Sparkles className="w-3.5 h-3.5 text-[#C59A2E] animate-pulse" />
+            <span className="text-[10px] font-mono font-bold text-[#C59A2E] uppercase tracking-[0.2em]">
+              WEEKLY ECOSYSTEM BRIEFING
+            </span>
+          </div>
 
           <h1
-            className="mast-h1 text-3xl md:text-[44px] lg:text-[54px] font-bold leading-[1.05] text-foreground mb-3 max-w-3xl"
+            className="text-3xl md:text-5xl lg:text-[54px] font-bold leading-[1.05] text-foreground mb-3 max-w-3xl tracking-tight"
             style={{ fontFamily: "'Georgia', serif" }}
           >
             The Weekly Dispatch
           </h1>
 
-          <p className="mast-tagline font-serif italic text-base md:text-[17px] text-muted-foreground max-w-lg mb-5 leading-relaxed">
-            The pulse of serious builders. Join 18,600+ founders and investors receiving verified registry intel every Sunday.
+          <p className="text-muted-foreground text-base md:text-lg max-w-xl mx-auto font-serif italic leading-relaxed">
+            The pulse of serious builders. Join 18,600+ founders and institutional investors receiving verified registry intel every Sunday.
           </p>
-
         </section>
 
-
-        <main className="py-16">
-
-          {/* SUB CARD */}
-          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] border-4 border-border bg-background shadow-[12px_12px_0px_0px_var(--accent)]">
+        {/* MAIN SUBSCRIPTION CARD */}
+        <main className="max-w-[1000px] mx-auto px-4 md:px-8 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] border border-border bg-card shadow-sm overflow-hidden">
 
             {/* FORM SIDE */}
-            <div className="p-8 sm:p-12 border-b lg:border-b-0 lg:border-r-4 border-border">
-
+            <div className="p-8 md:p-12 border-b lg:border-b-0 lg:border-r border-border flex flex-col justify-center">
               {subscribed ? (
-                <div className="h-full flex flex-col justify-center items-center text-center py-10">
+                <div className="flex flex-col items-center text-center py-8 space-y-4">
+                  <div className="w-16 h-16 rounded-full bg-[#C59A2E]/10 border border-[#C59A2E]/30 flex items-center justify-center mb-2">
+                    <CheckCircle2 className="w-8 h-8 text-[#C59A2E]" />
+                  </div>
 
-                  <CheckCircle2 className="w-16 h-16 text-accent mb-6" />
-
-                  <h2 className="text-3xl font-serif font-black mb-3">
-                    Synced to Registry.
+                  <h2 className="text-2xl font-bold text-foreground font-serif" style={{ fontFamily: "'Georgia', serif" }}>
+                    Synced to Registry
                   </h2>
 
-                  <p className="text-lg text-muted-foreground font-serif italic mb-8">
-                    You're on the list. Next briefing: Sunday 08:00 IST.
+                  <p className="text-sm text-muted-foreground font-serif italic max-w-xs">
+                    You're officially on the list. Next briefing arrives Sunday 08:00 IST.
                   </p>
 
-                  <Link
-                    href="/"
-                    className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-foreground text-background px-8 py-4 hover:bg-accent transition-all"
-                  >
-                    Explore Directory
-                  </Link>
-
+                  <div className="pt-4">
+                    <Link
+                      href="/registry"
+                      className="inline-flex items-center gap-2 bg-foreground text-background px-6 py-3 font-mono text-xs font-bold uppercase tracking-wider hover:bg-[#C59A2E] transition-colors"
+                    >
+                      Explore Global Registry <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
                 </div>
               ) : (
-                <div className="h-full flex flex-col justify-center">
+                <div className="space-y-6">
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-[#C59A2E]" />
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#C59A2E]">
+                      SUBSCRIBE FOR INTEL
+                    </span>
+                  </div>
 
-                  <h3 className="text-[11px] font-black uppercase tracking-[0.3em] mb-8 flex items-center justify-center lg:justify-start gap-2 text-muted-foreground">
-                    <Mail className="w-4 h-4 text-accent" />
-                    Subscribe for Intel
+                  <h3 className="text-xl md:text-2xl font-bold font-serif text-foreground" style={{ fontFamily: "'Georgia', serif" }}>
+                    Direct to your inbox every Sunday morning
                   </h3>
 
-                  <form
-                    onSubmit={handleSubscribe}
-                    className="space-y-4"
-                  >
-
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="founder@company.com"
-                      className="w-full border-b-2 border-border bg-transparent px-0 py-4 text-[18px] font-serif italic focus:outline-none focus:border-accent transition-all"
-                    />
+                  <form onSubmit={handleSubscribe} className="space-y-4 pt-2">
+                    <div>
+                      <label className="block font-mono text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                        Work Email Address <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="founder@company.com"
+                        className="w-full bg-background border border-border px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-[#C59A2E] transition-colors font-sans"
+                      />
+                    </div>
 
                     <button
                       type="submit"
                       disabled={!email || loading}
-                      className="w-full flex items-center justify-center gap-3 px-8 py-5 bg-foreground text-background text-[10px] font-black uppercase tracking-[0.2em] hover:bg-accent transition-all group"
+                      className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-foreground hover:bg-[#C59A2E] disabled:opacity-40 text-background text-xs font-mono font-bold uppercase tracking-[0.2em] transition-colors shadow-sm"
                     >
                       {loading ? "Verifying..." : "Join The Dispatch"}
-
-                      {!loading && (
-                        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                      )}
-
+                      {!loading && <ArrowRight className="w-4 h-4" />}
                     </button>
-
                   </form>
 
-                  <p className="text-[10px] text-muted-foreground mt-6 italic text-center lg:text-left">
-                    Registry updates are transmitted weekly. Unsubscribe at any time.
+                  <p className="text-[11px] text-muted-foreground italic font-serif">
+                    Strict privacy guarantee. No spam, ever. Unsubscribe at any time with one click.
                   </p>
-
                 </div>
               )}
-
             </div>
 
-
             {/* PERKS SIDE */}
-            <div className="bg-muted p-8 sm:p-12 flex flex-col justify-center gap-10">
-
-              <div className="space-y-8">
+            <div className="bg-muted/40 p-8 md:p-12 flex flex-col justify-between gap-8 border-t lg:border-t-0 border-border">
+              <div className="space-y-6">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground block">
+                  Subscribers Receive
+                </span>
 
                 <Perk
-                  icon={<Zap size={18} />}
+                  icon={<Zap size={16} />}
                   title="Pre-Seed Intel"
-                  desc="Direct registry highlights before the hype cycle begins."
+                  desc="Direct registry highlights and breakthrough startups before market hype cycles begin."
                 />
 
                 <Perk
-                  icon={<ShieldCheck size={18} />}
-                  title="Verified Only"
-                  desc="Zero noise. Only manually verified corporate data points."
+                  icon={<ShieldCheck size={16} />}
+                  title="Verified Signals Only"
+                  desc="Zero sponsored noise. Only audited corporate data points and real founder metrics."
                 />
 
                 <Perk
-                  icon={<Globe size={18} />}
-                  title="Global Reach"
-                  desc="India's ecosystem mapped for institutional evaluation."
+                  icon={<Globe size={16} />}
+                  title="Global Taxonomy"
+                  desc="Emerging tech markets mapped with institutional accuracy for cross-border capital."
                 />
-
               </div>
-
 
               {/* STATS BAND */}
-              <div className="pt-8 border-t border-border flex justify-between items-center px-2">
-
-                <Stat value="18K+" label="Readers" />
+              <div className="pt-6 border-t border-border/60 grid grid-cols-3 gap-2 text-center">
+                <Stat value="18.6K+" label="Readers" />
                 <Stat value="42%" label="Open Rate" />
-                <Stat value="Weekly" label="Freq" />
-
+                <Stat value="Weekly" label="Frequency" />
               </div>
-
             </div>
 
           </div>
-
         </main>
 
-
-        {/* FOOTER */}
-        <footer className="mt-12 text-center">
-
-          <span className="font-sans font-bold text-[10px] tracking-[0.4em] uppercase text-muted-foreground">
+        {/* FOOTER NOTE */}
+        <footer className="pb-16 text-center">
+          <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
             UpForge Independent Dispatch © 2026
           </span>
-
         </footer>
 
       </div>
-    </div>
+    </>
   );
 }
-
-
-/* PERK COMPONENT */
 
 function Perk({
   icon,
@@ -196,30 +192,21 @@ function Perk({
   desc: string;
 }) {
   return (
-    <div className="flex gap-5 items-start">
-
-      <div className="mt-1 w-10 h-10 border-2 border-border flex items-center justify-center shrink-0 bg-background text-accent shadow-[4px_4px_0px_0px_var(--border)]">
+    <div className="flex gap-4 items-start">
+      <div className="w-8 h-8 rounded-none border border-[#C59A2E]/40 bg-[#C59A2E]/10 flex items-center justify-center shrink-0 text-[#C59A2E] mt-0.5">
         {icon}
       </div>
-
       <div>
-
-        <h4 className="text-[13px] font-black uppercase tracking-wider mb-1 font-sans">
+        <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-foreground mb-1">
           {title}
         </h4>
-
-        <p className="text-[14px] text-muted-foreground font-serif italic leading-snug">
+        <p className="text-xs text-muted-foreground font-serif leading-relaxed">
           {desc}
         </p>
-
       </div>
-
     </div>
   );
 }
-
-
-/* STAT COMPONENT */
 
 function Stat({
   value,
@@ -229,16 +216,14 @@ function Stat({
   label: string;
 }) {
   return (
-    <div className="text-center">
-
-      <p className="text-[16px] font-black font-sans uppercase">
+    <div>
+      <p className="text-sm font-mono font-bold text-foreground">
         {value}
       </p>
-
-      <p className="text-[9px] uppercase tracking-widest font-bold text-muted-foreground">
+      <p className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground mt-0.5">
         {label}
       </p>
-
     </div>
   );
 }
+
