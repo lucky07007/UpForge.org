@@ -53,7 +53,7 @@ function isRateLimited(ip: string, limit: number, windowMs: number): boolean {
   return false
 }
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const userAgent = request.headers.get("user-agent") || ""
   const uaLower = userAgent.toLowerCase().trim()
@@ -118,10 +118,7 @@ export async function proxy(request: NextRequest) {
   })
 }
 
-export default proxy
-
 export const config = {
-  // Static assets aur parameters ko middleware execution layer se bypass karein
   matcher: [
     "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.*\\.xml|ads.txt|llms.txt|llms-full.txt|.*\\.(?:png|jpg|jpeg|gif|webp|svg|css|js|woff2?|json)).*)",
   ],
