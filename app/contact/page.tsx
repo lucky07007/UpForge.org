@@ -1,3 +1,4 @@
+// app/contact/page.tsx — UpForge Registry Contact & Editorial Inquiries
 "use client";
 
 import { useState } from "react";
@@ -10,8 +11,11 @@ import {
   Mail,
   MessageSquare,
   MessageCircle,
-  ArrowLeft,
+  Sparkles,
+  ShieldCheck,
+  Clock
 } from "lucide-react";
+import { Navbar } from "@/components/navbar";
 
 const WORKING_SERVICE_ID = "service_jwpk5li";
 const WORKING_TEMPLATE_ID = "template_ah89eas";
@@ -27,17 +31,14 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div className="mb-6">
-      <label className="block text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground mb-2">
-        {label} {required && <span className="text-accent">*</span>}
+    <div className="flex flex-col gap-1.5 mb-5">
+      <label className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+        {label} {required && <span className="text-red-500">*</span>}
       </label>
       {children}
     </div>
   );
 }
-
-const inputCls =
-  "w-full border-b-2 border-border bg-transparent px-0 py-3 text-[16px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-all font-serif";
 
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -83,248 +84,246 @@ export default function ContactPage() {
 
       setSent(true);
     } catch (err) {
-      setError("Transmission failed. Please use direct email.");
+      setError("Transmission failed. Please try again or use direct email.");
     } finally {
       setLoading(false);
     }
   };
 
   /* SUCCESS STATE */
-
   if (sent) {
     return (
-      <div className="bg-background min-h-screen flex items-center justify-center px-4">
-        <div className="max-w-md w-full border-4 border-border p-10 text-center shadow-[12px_12px_0px_0px_var(--accent)]">
+      <>
+        <Navbar />
+        <div className="min-h-screen bg-muted/30 flex items-center justify-center p-4 md:p-8 font-serif">
+          <div className="bg-background border-2 border-foreground max-w-lg w-full p-8 md:p-12 text-center shadow-sm relative">
+            <div className="w-16 h-16 rounded-full bg-[#22C55E]/10 border border-[#22C55E]/30 flex items-center justify-center mx-auto mb-6">
+              <CheckCircle2 className="w-8 h-8 text-[#22C55E]" />
+            </div>
 
-          <CheckCircle2 className="w-16 h-16 text-accent mx-auto mb-6" />
+            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#C59A2E] block mb-2">
+              Transmission Received
+            </span>
 
-          <h2 className="text-3xl font-serif font-black mb-3">
-            Transmission Logged.
-          </h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3" style={{ fontFamily: "'Georgia', serif" }}>
+              Inquiry Logged
+            </h2>
 
-          <p className="text-lg text-muted-foreground font-serif italic mb-8">
-            Your inquiry has been received. Our editorial desk will reach out to{" "}
-            {form.email} shortly.
-          </p>
+            <p className="text-muted-foreground text-sm leading-relaxed mb-6 font-serif">
+              Thank you, <strong className="text-foreground">{form.name}</strong>. Your message has been routed to our editorial review desk.
+            </p>
 
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-foreground text-background px-8 py-4 hover:bg-accent transition-all"
-          >
-            Return to Registry
-          </Link>
+            <div className="bg-muted border border-[#C59A2E]/30 p-5 mb-8 text-left space-y-2">
+              <div className="flex items-center gap-2 text-[#C59A2E]">
+                <Clock className="w-4 h-4" />
+                <span className="font-mono text-[10px] font-bold uppercase tracking-wider">Response Protocol</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Replies are sent to <strong className="text-foreground">{form.email}</strong> within 24-48 business hours.
+              </p>
+            </div>
 
+            <Link
+              href="/registry"
+              className="inline-flex items-center justify-center gap-2 bg-foreground hover:bg-[#C59A2E] text-background px-8 py-3.5 font-mono text-xs font-bold uppercase tracking-wider transition-colors w-full"
+            >
+              Return to Registry <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   /* MAIN PAGE */
-
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-accent selection:text-background">
-
-      <div className="max-w-[1100px] mx-auto px-6 lg:px-12 pt-10 pb-24">
-
-        {/* HEADER */}
-
-        <section className="border-b border-border max-w-[1300px] mx-auto w-full mt-5 pb-6 flex flex-col items-center text-center">
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-background text-foreground font-serif selection:bg-[#C59A2E]/20">
+        
+        {/* MASTHEAD */}
+        <section className="border-b-[2px] border-foreground max-w-[1200px] mx-auto px-4 md:px-8 pt-10 pb-10 text-center flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-muted border border-[#C59A2E]/40 mb-4">
+            <Sparkles className="w-3.5 h-3.5 text-[#C59A2E] animate-pulse" />
+            <span className="text-[10px] font-mono font-bold text-[#C59A2E] uppercase tracking-[0.2em]">
+              EDITORIAL DESK & INQUIRIES
+            </span>
+          </div>
 
           <h1
-            className="mast-h1 text-3xl md:text-[44px] lg:text-[54px] font-bold leading-[1.05] text-foreground mb-3 max-w-3xl"
+            className="text-3xl md:text-5xl lg:text-[54px] font-bold leading-[1.05] text-foreground mb-3 max-w-3xl tracking-tight"
             style={{ fontFamily: "'Georgia', serif" }}
           >
             Contact the Registry
           </h1>
 
-          <p className="mast-tagline font-serif italic text-base md:text-[17px] text-muted-foreground max-w-lg mb-5 leading-relaxed">
-            For registry disputes, verification updates, or partnership inquiries.
-            Our editorial desk operates independently.
+          <p className="text-muted-foreground text-base md:text-lg max-w-xl mx-auto font-serif italic leading-relaxed">
+            For registry disputes, profile verification updates, or partnership inquiries. Our editorial team operates with strict independence.
           </p>
-
         </section>
 
-        {/* GRID */}
+        {/* MAIN GRID */}
+        <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-10 items-start">
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-12 mt-16">
+            {/* FORM CARD */}
+            <div className="border border-border bg-card p-6 md:p-10 shadow-sm space-y-6">
+              <div className="border-b border-border pb-4">
+                <h3 className="text-xl font-bold text-foreground font-serif" style={{ fontFamily: "'Georgia', serif" }}>
+                  Submit Inquiry Transmission
+                </h3>
+                <p className="text-xs text-muted-foreground font-serif italic">
+                  Fill out the details below to reach our analyst desk.
+                </p>
+              </div>
 
-          {/* FORM SIDE */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <Field label="Full Name" required>
+                  <input
+                    value={form.name}
+                    onChange={update("name")}
+                    placeholder="e.g. Jane Doe"
+                    className="w-full bg-background border border-border px-4 py-3 text-sm text-foreground focus:outline-none focus:border-[#C59A2E] transition-colors"
+                  />
+                </Field>
 
-          <div className="space-y-4">
+                <Field label="Email Address" required>
+                  <input
+                    type="email"
+                    value={form.email}
+                    onChange={update("email")}
+                    placeholder="jane@company.com"
+                    className="w-full bg-background border border-border px-4 py-3 text-sm text-foreground focus:outline-none focus:border-[#C59A2E] transition-colors"
+                  />
+                </Field>
+              </div>
 
-            <div className="grid sm:grid-cols-2 gap-x-8">
+              <Field label="Nature of Inquiry">
+                <select
+                  value={form.title}
+                  onChange={update("title")}
+                  className="w-full bg-background border border-border px-4 py-3 text-sm text-foreground focus:outline-none focus:border-[#C59A2E] transition-colors cursor-pointer"
+                >
+                  <option value="">Select inquiry classification…</option>
+                  <option value="Startup Verification">Startup Verification Request</option>
+                  <option value="Data Correction">Registry Data Correction</option>
+                  <option value="Partnership">Ecosystem Partnership</option>
+                  <option value="Support">General Operational Support</option>
+                </select>
+              </Field>
 
-              <Field label="Full Name" required>
-                <input
-                  value={form.name}
-                  onChange={update("name")}
-                  placeholder="Jane Doe"
-                  className={inputCls}
+              <Field label="Message Payload" required>
+                <textarea
+                  value={form.message}
+                  onChange={update("message")}
+                  placeholder="Provide context, UFRN identifier (if applicable), or inquiry payload..."
+                  rows={5}
+                  className="w-full bg-background border border-border px-4 py-3 text-sm text-foreground focus:outline-none focus:border-[#C59A2E] transition-colors resize-y font-serif"
                 />
               </Field>
 
-              <Field label="Email" required>
-                <input
-                  type="email"
-                  value={form.email}
-                  onChange={update("email")}
-                  placeholder="jane@company.com"
-                  className={inputCls}
-                />
-              </Field>
+              {error && (
+                <div className="p-3 bg-red-500/10 border border-red-500/30 text-red-600 text-xs font-mono">
+                  ⚠️ {error}
+                </div>
+              )}
 
+              <div className="pt-4 border-t border-border flex justify-end">
+                <button
+                  onClick={handleSubmit}
+                  disabled={!isValid || loading}
+                  className="inline-flex items-center gap-2 bg-foreground hover:bg-[#C59A2E] disabled:opacity-30 disabled:cursor-not-allowed text-background px-8 py-3.5 font-mono text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
+                >
+                  {loading ? (
+                    <><Loader2 className="w-4 h-4 animate-spin" /> Transmitting…</>
+                  ) : (
+                    <>Send Transmission <ArrowRight className="w-4 h-4" /></>
+                  )}
+                </button>
+              </div>
             </div>
 
+            {/* SIDEBAR */}
+            <div className="space-y-6">
 
-            <Field label="Nature of Inquiry">
+              {/* DIRECT CHANNELS */}
+              <div className="border border-border bg-card p-6 shadow-sm space-y-6">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#C59A2E] block">
+                  Direct Communications
+                </span>
 
-              <select
-                value={form.title}
-                onChange={update("title")}
-                className={`${inputCls} appearance-none cursor-pointer`}
-              >
-                <option value="">Select a topic…</option>
-                <option value="Startup Verification">Startup Verification</option>
-                <option value="Data Correction">Data Correction</option>
-                <option value="Partnership">Partnership</option>
-                <option value="Support">General Support</option>
-              </select>
+                {/* EDITORIAL */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2 text-foreground font-mono text-xs font-bold">
+                    <Mail className="w-4 h-4 text-[#C59A2E]" />
+                    <span>Editorial Review Desk</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground font-serif">Registry disputes & record updates:</p>
+                  <a
+                    href="mailto:support@upforge.org"
+                    className="inline-block text-sm font-mono font-bold text-[#C59A2E] hover:underline"
+                  >
+                    support@upforge.org
+                  </a>
+                </div>
 
-            </Field>
+                <div className="h-px bg-border" />
 
+                {/* PARTNERSHIPS */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2 text-foreground font-mono text-xs font-bold">
+                    <MessageSquare className="w-4 h-4 text-[#C59A2E]" />
+                    <span>Ecosystem & Partnerships</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground font-serif">Institutional collaborations & media:</p>
+                  <a
+                    href="mailto:partners@upforge.org"
+                    className="inline-block text-sm font-mono font-bold text-[#C59A2E] hover:underline"
+                  >
+                    partners@upforge.org
+                  </a>
+                </div>
 
-            <Field label="Message" required>
+                <div className="h-px bg-border" />
 
-              <textarea
-                value={form.message}
-                onChange={update("message")}
-                placeholder="Describe the inquiry in detail..."
-                rows={4}
-                className={`${inputCls} resize-none`}
-              />
+                {/* WHATSAPP */}
+                <div className="space-y-3 pt-1">
+                  <div className="flex items-center gap-2 text-[#22C55E] font-mono text-xs font-bold">
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Instant WhatsApp Desk</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground font-serif">
+                    Urgent verification or profile status check?
+                  </p>
+                  <a
+                    href="https://wa.link/x6uu80"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-[#22C55E] hover:bg-[#1ea34d] text-white text-xs font-mono font-bold uppercase tracking-wider transition-colors shadow-sm"
+                  >
+                    Start WhatsApp Chat
+                  </a>
+                </div>
+              </div>
 
-            </Field>
+              {/* OPERATIONAL HOURS */}
+              <div className="border border-border bg-muted/40 p-5 text-center">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-muted-foreground block mb-1">
+                  Desk SLA & Hours
+                </span>
+                <p className="text-xs font-serif text-foreground">
+                  Mon – Fri · 10:00 – 18:00 IST<br />
+                  <span className="text-muted-foreground text-[11px] italic">Typical turn-around: 24-48 business hours</span>
+                </p>
+              </div>
 
-
-            {error && (
-              <p className="text-red-600 text-[12px] font-bold mb-4">
-                {error}
-              </p>
-            )}
-
-
-            <button
-              onClick={handleSubmit}
-              disabled={!isValid || loading}
-              className={`w-full md:w-auto flex items-center justify-center gap-4 px-10 py-5 text-[10px] font-black uppercase tracking-widest transition-all ${
-                isValid && !loading
-                  ? "bg-foreground text-background hover:bg-accent"
-                  : "bg-muted text-muted-foreground opacity-50 cursor-not-allowed"
-              }`}
-            >
-              {loading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <>
-                  Send Transmission
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              )}
-            </button>
+            </div>
 
           </div>
-
-
-          {/* RIGHT PANEL */}
-
-          <aside className="space-y-8">
-
-            <div className="border-2 border-border p-8 bg-muted flex flex-col space-y-10 text-center md:text-left">
-
-              {/* EDITORIAL */}
-
-              <div>
-
-                <h4 className="flex items-center justify-center md:justify-start gap-2 text-[11px] font-black uppercase tracking-[0.2em] mb-4 text-accent">
-                  <Mail className="w-4 h-4" />
-                  Editorial Desk
-                </h4>
-
-                <p className="text-[13px] text-muted-foreground font-serif italic mb-4">
-                  Registry disputes & profile updates:
-                </p>
-
-                <a
-                  href="mailto:support@upforge.org"
-                  className="text-[16px] font-serif font-bold hover:text-accent transition-colors underline underline-offset-4"
-                >
-                  support@upforge.org
-                </a>
-
-              </div>
-
-
-              {/* PARTNERSHIPS */}
-
-              <div>
-
-                <h4 className="flex items-center justify-center md:justify-start gap-2 text-[11px] font-black uppercase tracking-[0.2em] mb-4 text-accent">
-                  <MessageSquare className="w-4 h-4" />
-                  Global Partnerships
-                </h4>
-
-                <p className="text-[13px] text-muted-foreground font-serif italic mb-4">
-                  Sponsorships &amp; media collaborations:
-                </p>
-
-                <a
-                  href="mailto:partners@upforge.org"
-                  className="text-[16px] font-serif font-bold hover:text-accent transition-colors underline underline-offset-4"
-                >
-                  partners@upforge.org
-                </a>
-
-              </div>
-
-
-              {/* WHATSAPP */}
-
-              <div className="pt-8 border-t border-border">
-
-                <h4 className="flex items-center justify-center md:justify-start gap-2 text-[11px] font-black uppercase tracking-[0.2em] mb-4 text-green-600">
-                  <MessageCircle className="w-4 h-4" />
-                  Instant Connect
-                </h4>
-
-                <p className="text-[13px] text-muted-foreground font-serif italic mb-5">
-                  Urgent registry inquiries?
-                </p>
-
-                <a
-                  href="https://wa.link/x6uu80"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full px-6 py-4 bg-green-600 text-white text-[10px] font-black uppercase tracking-widest hover:bg-green-700 transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,0.1)]"
-                >
-                  Start WhatsApp Chat
-                </a>
-
-              </div>
-
-
-              <p className="text-[9px] font-sans font-bold uppercase tracking-[0.3em] opacity-30 mt-8 text-center md:text-left">
-                Verified Independent Registry <br />
-                Mon—Fri · 10:00—18:00 IST
-              </p>
-
-            </div>
-
-          </aside>
-
         </div>
 
       </div>
-
-    </div>
+    </>
   );
 }
+
