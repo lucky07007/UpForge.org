@@ -4,11 +4,11 @@ import type { Startup } from "@/types/startup"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Navbar } from "@/components/navbar"
-import { ArrowRight, ArrowUpRight, TrendingUp } from "lucide-react"
+import { ArrowRight, ArrowUpRight, Search, ShieldCheck, Filter, X } from "lucide-react"
 
 export const revalidate = 300
 
-const PAGE_SIZE = 10
+const PAGE_SIZE = 12
 const BASE_URL = "https://www.upforge.org"
 
 type StartupRow = Startup
@@ -32,22 +32,6 @@ async function getData(
 async function getFilters() {
   return getSheetFilters()
 }
-
-
-// ─── TRENDING SECTORS ───
-const TRENDING_SECTORS = [
-  "AI & Technology",
-  "FinTech",
-  "SaaS",
-  "Health",
-  "E-commerce & D2C",
-  "Deeptech & Climate",
-  "Mobility & EV",
-  "Agri-tech",
-  "Logistics / Quick Commerce",
-  "Consumer & Hardware",
-  "Streaming Platform",
-]
 
 // ─── HELPERS ───
 
@@ -169,8 +153,6 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
 // ─── PAGE ───
 
 export default async function RegistryPage({ searchParams }: PageProps) {
-
-
   const sp      = await searchParams
   const q       = sp?.q?.trim()       ?? ""
   const year    = sp?.year?.trim()    ?? ""
@@ -240,7 +222,6 @@ export default async function RegistryPage({ searchParams }: PageProps) {
 
   const allPageStartups = [...featured, ...grid]
 
-
   // ─── SCHEMA BLOCKS ───
   const datasetSchema = {
     "@context": "https://schema.org",
@@ -268,7 +249,7 @@ export default async function RegistryPage({ searchParams }: PageProps) {
       "@type": "ListItem",
       position: baseNum + idx + 1,
       name: s.name,
-      url: `https://www.upforge.in/startup/${s.slug}`,
+      url: `https://www.upforge.org/startup/${s.slug}`,
     })),
   }
 
@@ -295,698 +276,448 @@ export default async function RegistryPage({ searchParams }: PageProps) {
       {prevUrl && <link rel="prev" href={prevUrl} />}
       {nextUrl && <link rel="next" href={nextUrl} />}
 
-      <div className="min-h-[100vh] bg-background text-foreground font-serif flex flex-col relative overflow-hidden">
-        <div className="flex-1 relative z-10 w-full flex flex-col">
-
-
-          <section className="border-b-[2px] border-foreground max-w-[1300px] mx-auto px-4 md:px-8 w-full mt-4 pb-6 flex flex-col items-center text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-muted border border-[#C59A2E]/40 mb-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C59A2E]" />
-              <span className="text-[10px] font-mono font-bold text-[#C59A2E] uppercase tracking-widest">
-                INDEPENDENT STARTUP INTELLIGENCE
+      {/* ── Header Hero Section ── */}
+      <div className="relative border-b border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-2xl py-12 px-6">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-accent-primary/10 rounded-full blur-[100px]" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent-secondary/10 rounded-full blur-[100px]" />
+        </div>
+        
+        <div className="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-accent-primary px-3 py-1 rounded-full bg-accent-primary/10 border border-accent-primary/20">
+                Independent Startup Intelligence
               </span>
             </div>
-            <h1
-              className="mast-h1 text-3xl md:text-[44px] lg:text-[54px] font-bold leading-[1.05] text-foreground mb-3 max-w-3xl"
-              style={{ fontFamily: "'Georgia', serif" }}
-            >
+            <h1 className="mast-h1 text-4xl md:text-6xl font-bold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/60">
               Global Startup Registry
             </h1>
-            <p className="font-serif italic text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+            <p className="mast-tagline text-base md:text-lg text-muted-foreground max-w-2xl font-light">
               The standardized public ledger of verified emerging companies, UFRN identifiers, and founder records.
             </p>
-          </section>
-
-          {/* ── Trending Sectors Tabs ── */}
-          <nav
-            className="flex overflow-x-auto border-b-[1.5px] border-foreground bg-muted/40 px-6 items-center max-w-[1300px] mx-auto w-full"
-            aria-label="Trending sectors"
-            style={{ scrollbarWidth: "none" }}
-          >
-            <span className="flex items-center gap-1 text-[9px] text-[#C59A2E] uppercase tracking-[0.2em] py-3 pr-3 shrink-0 font-mono">
-              <TrendingUp size={10} />
-              Trending
-            </span>
-            <Link
-              href="/registry"
-              className={`shrink-0 px-4 py-3 font-mono text-[9px] font-bold tracking-[0.15em] uppercase transition-colors whitespace-nowrap border-b-2 ${
-                (!cat && !q && !country)
-                  ? "border-[#C59A2E] text-foreground"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              All
-            </Link>
-            {TRENDING_SECTORS.slice(0, 10).map(c => (
-              <Link
-                key={c}
-                href={`/registry?sector=${encodeURIComponent(c)}${q ? `&q=${encodeURIComponent(q)}` : ""}${country ? `&country=${encodeURIComponent(country)}` : ""}`}
-                className={`shrink-0 px-4 py-3 font-mono text-[9px] font-bold tracking-[0.15em] uppercase transition-colors whitespace-nowrap border-b-2 ${
-                  cat === c
-                    ? "border-[#C59A2E] text-foreground"
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {c}
-              </Link>
-            ))}
-          </nav>
-
-          {/* ── Toolbar ── */}
-          <div className="sticky top-0 z-30 bg-background border-b-[1.5px] border-foreground shadow-sm w-full" id="rg-toolbar">
-            <div className="max-w-[1300px] mx-auto px-6 py-3">
-              {/* Search row WITH AUTOCOMPLETE */}
-              <div className="relative mb-3" id="search-wrapper">
-                <form
-                  action="/registry"
-                  method="GET"
-                  className="relative flex items-center h-11 bg-background border-[1.5px] border-foreground focus-within:ring-2 focus-within:ring-[#C59A2E] focus-within:border-[#C59A2E] transition-all"
-                  id="search-form"
-                >
-                  {year    && <input type="hidden" name="year"    value={year} />}
-                  {cat     && <input type="hidden" name="sector"  value={cat} />}
-                  {country && <input type="hidden" name="country" value={country} />}
-                  {sort && sort !== "name" && <input type="hidden" name="sort" value={sort} />}
-                  <span className="px-4 text-foreground flex items-center shrink-0">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                    </svg>
-                  </span>
-                  <input
-                    type="search" name="q" defaultValue={q}
-                    id="search-input"
-                    className="flex-1 bg-transparent border-none text-sm text-foreground font-serif italic focus:outline-none min-w-0"
-                    placeholder="Search startups, founders, sectors, cities…"
-                    aria-label="Search global registry"
-                    autoComplete="off"
-                  />
-                  <button
-                    type="submit"
-                    className="h-full px-5 bg-foreground hover:bg-[#C59A2E] text-background font-mono text-[10px] font-bold uppercase tracking-[0.15em] shrink-0 transition-colors"
-                  >
-                    Search
-                  </button>
-                </form>
-
-              </div>
-
-              {/* Filter + Sort row */}
-              <div className="flex items-center gap-3 flex-wrap">
-                <button
-                  type="button"
-                  className={`inline-flex items-center gap-2 h-8 px-4 bg-muted border border-border font-mono text-[9px] font-bold uppercase tracking-[0.15em] transition-all shrink-0 ${
-                    activeFilterCount > 0
-                      ? "border-[#C59A2E] text-[#C59A2E]"
-                      : "text-foreground hover:border-foreground"
-                  }`}
-                  id="filter-toggle-btn"
-                  aria-expanded="false"
-                  aria-controls="filter-panel"
-                >
-                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
-                    <line x1="2" y1="4" x2="14" y2="4"/><line x1="4" y1="8" x2="12" y2="8"/><line x1="6" y1="12" x2="10" y2="12"/>
-                  </svg>
-                  Filters
-                  {activeFilterCount > 0 && (
-                    <span className="bg-[#C59A2E] text-background rounded-full px-2 py-0.5 text-[9px]">{activeFilterCount}</span>
-                  )}
-                  <span className="shrink-0 transition-transform duration-200" id="filter-chevron">
-                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="2,3 5,7 8,3"/>
-                    </svg>
-                  </span>
-                </button>
-
-                {/* Sort */}
-                <div className="flex items-center gap-4 ml-auto overflow-x-auto py-1 shrink-0" style={{ scrollbarWidth: "none" }}>
-                  <span className="w-px h-4 bg-border shrink-0 hidden sm:block" />
-                  {[
-                    { label: "A–Z",     val: "name"   },
-                    { label: "Newest",  val: "newest" },
-                    { label: "Founded", val: "year"   },
-                  ].map(s => (
-                    <Link
-                      key={s.val}
-                      href={qs({ sort: s.val, page: undefined })}
-                      className={`font-mono text-[9px] font-bold uppercase tracking-[0.15em] whitespace-nowrap transition-colors shrink-0 ${
-                        sort === s.val ? "text-[#C59A2E]" : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      {s.label}
-                    </Link>
-                  ))}
-                  {isFiltered && (
-                    <Link href="/registry" className="font-mono text-[9px] font-bold uppercase tracking-[0.15em] text-[#C59A2E] ml-2 shrink-0 hover:underline">
-                      ✕ Clear
-                    </Link>
-                  )}
-                </div>
-              </div>
-
-              {/* Filter panel */}
-              <div
-                className="filter-panel-wrap overflow-hidden max-h-0 opacity-0 transition-all duration-300 pointer-events-none mt-0"
-                id="filter-panel"
-                role="region"
-                aria-label="Filters"
-              >
-                <div className="bg-muted border border-border p-4 flex flex-wrap gap-4 items-end mt-3">
-                  <div className="flex flex-col gap-1.5 flex-1 min-w-[180px]">
-                    <label className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground" htmlFor="rg-year-sel">Year</label>
-                    <select className="h-9 bg-background border border-border text-xs text-foreground px-3 focus:outline-none focus:border-[#C59A2E] appearance-none" id="rg-year-sel">
-                      <option value="">Any Year</option>
-                      {years.map(yr => (
-                        <option key={yr} value={String(yr)} selected={year === String(yr)}>{yr}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex flex-col gap-1.5 flex-1 min-w-[180px]">
-                    <label className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground" htmlFor="rg-cat-sel">Sector</label>
-                    <select className="h-9 bg-background border border-border text-xs text-foreground px-3 focus:outline-none focus:border-[#C59A2E] appearance-none" id="rg-cat-sel">
-                      <option value="">All Sectors</option>
-                      {cats.map(c => (
-                        <option key={c} value={c} selected={cat === c}>{c}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex flex-col gap-1.5 flex-1 min-w-[180px]">
-                    <label className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground" htmlFor="rg-country-sel">Country</label>
-                    <select className="h-9 bg-background border border-border text-xs text-foreground px-3 focus:outline-none focus:border-[#C59A2E] appearance-none" id="rg-country-sel">
-                      <option value="">All Countries</option>
-                      {countries.map(ct => (
-                        <option key={ct.code} value={ct.code} selected={country === ct.code}>
-                          {ct.name} ({ct.code})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {isFiltered && (
-                    <Link href="/registry" className="h-9 bg-[#C59A2E] text-background flex items-center px-4 font-mono text-[9px] font-bold uppercase tracking-[0.15em] shrink-0 hover:bg-[#A8821E]">
-                      ✕ Clear All
-                    </Link>
-                  )}
-                </div>
-              </div>
-            </div>
           </div>
-
-          {/* ── Results bar ── */}
-          <div className="bg-muted/50 px-6 py-3 flex items-center border-b border-border w-full">
-            <div className="max-w-[1300px] mx-auto w-full flex items-center gap-3">
-              <span className="font-serif text-[14px] font-bold text-foreground italic">
-                {q ? `"${q}"` : cat ? cat : country ? (countries.find(c => c.code === country)?.name ?? country) : year ? `Est. ${year}` : "All Startups"}
-              </span>
-              <span className="text-xs text-muted-foreground">— {total.toLocaleString()} profiles</span>
-              <span className="flex-1 h-px bg-border hidden sm:block" />
-              <span className="font-mono text-[10px] text-muted-foreground tracking-widest uppercase">
-                Page {page} of {totalPages || 1}
-              </span>
-            </div>
-          </div>
-
-          {/* ── Main content ── */}
-          <div className="max-w-[1300px] mx-auto px-6 py-8 w-full relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 lg:gap-12 items-start">
-
-              <div className="space-y-10">
-
-                {/* ══════════════════════════════════════
-                    FEATURED — Forbes Cover style
-                ══════════════════════════════════════ */}
-                {featured.length > 0 && (
-                  <section>
-                    <div className="flex items-center gap-3 mb-6">
-                      <span className="font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-foreground">Featured</span>
-                      <div className="flex-1 h-px bg-foreground" />
-                    </div>
-
-                    {/* Cover story — first featured, large horizontal layout */}
-                    {featured[0] && (
-                      <Link
-                        href={`/startup/${featured[0].slug}`}
-                        className="group flex flex-col md:flex-row gap-0 border-b-[2px] border-foreground pb-8 mb-8"
-                      >
-                        {/* Text left */}
-                        <div className="flex-1 flex flex-col justify-between pr-0 md:pr-8 order-2 md:order-1 pt-5 md:pt-0">
-                          <div>
-                            <div className="flex items-center gap-3 mb-3">
-                              <span className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-[#C59A2E]">
-                                {featured[0].category || "Cover Story"}
-                              </span>
-                              <span className="font-mono text-[9px] text-muted-foreground uppercase tracking-widest">
-                                Featured Profile
-                              </span>
-                            </div>
-                            <h2
-                              className="text-3xl md:text-4xl font-bold leading-[1.08] text-foreground mb-4 group-hover:text-[#C59A2E] transition-colors"
-                              style={{ fontFamily: "'Georgia', serif" }}
-                            >
-                              {featured[0].name}: An Inside Look At Their Trajectory.
-                            </h2>
-                            <p className="font-serif italic text-base md:text-lg text-foreground/80 leading-relaxed mb-5">
-                              {featured[0].description
-                                ? featured[0].description.split('.')[0] + '.'
-                                : "A comprehensive analysis of verified market positioning and strategic execution."}
-                            </p>
-                          </div>
-                          <div className="flex items-center gap-3 pt-4 border-t border-border">
-                            <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-foreground">
-                              {featured[0].country_code} · Est. {featured[0].founded_year}
-                            </span>
-                            {featured[0].ufrn && (
-                              <>
-                                <span className="w-px h-3 bg-border" />
-                                <span className="font-mono text-[9px] text-[#C59A2E] uppercase tracking-widest">
-                                  UFRN Verified
-                                </span>
-                              </>
-                            )}
-                            <span className="ml-auto font-mono text-[9px] font-black uppercase tracking-[0.1em] flex items-center gap-1 text-[#C59A2E] group-hover:gap-2 transition-all">
-                              Read Profile <ArrowUpRight size={10} />
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Image right */}
-                        <div className="w-full md:w-[280px] lg:w-[320px] shrink-0 order-1 md:order-2">
-                          <div className="w-full aspect-[4/3] bg-muted overflow-hidden relative">
-                            {featured[0].logo_url ? (
-                              <img
-                                src={featured[0].logo_url}
-                                alt={featured[0].name}
-                                loading="eager"
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                              />
-                            ) : (
-                              <div className="absolute inset-0 flex items-center justify-center font-serif text-6xl font-bold text-muted-foreground/20">
-                                {featured[0].name.charAt(0)}
-                              </div>
-                            )}
-                            <div className="absolute top-3 left-3 bg-red-700 px-3 py-1 font-mono font-black text-[8px] tracking-[0.2em] text-white uppercase">
-                              {featured[0].category || "Featured"}
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                    )}
-
-                    {/* Secondary featured — smaller horizontal cards */}
-                    {featured.slice(1).length > 0 && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-y md:divide-y-0 md:divide-x divide-foreground border-b-[2px] border-foreground pb-8 mb-2">
-                        {featured.slice(1, 3).map((s, fi) => (
-                          <Link
-                            key={s.id}
-                            href={`/startup/${s.slug}`}
-                            className="group flex flex-row items-start gap-4 py-4 md:py-0 md:px-6 first:md:pl-0 last:md:pr-0 hover:opacity-80 transition-opacity"
-                          >
-                            {/* Text left */}
-                            <div className="flex-1 flex flex-col gap-1.5">
-                              <span className="font-mono text-[9px] font-black uppercase tracking-[0.15em] text-[#C59A2E]">
-                                {s.category || "Startup"}
-                              </span>
-                              <h3
-                                className="font-bold text-[18px] leading-tight text-foreground group-hover:text-[#C59A2E] transition-colors"
-                                style={{ fontFamily: "'Georgia', serif" }}
-                              >
-                                {s.name}
-                              </h3>
-                              <p className="font-serif italic text-[12px] text-muted-foreground leading-relaxed line-clamp-2">
-                                {s.description?.slice(0, 80) ?? "Verified entity on the global registry."}
-                              </p>
-                              <div className="flex items-center gap-2 mt-1">
-                                <span className="font-mono text-[9px] text-muted-foreground uppercase">
-                                  {s.country_code} · {s.founded_year}
-                                </span>
-                                {s.ufrn && (
-                                  <span className="font-mono text-[9px] text-[#C59A2E] uppercase">· UFRN ✓</span>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* Image right */}
-                            {s.logo_url && (
-                              <div className="w-16 h-16 shrink-0 bg-muted overflow-hidden">
-                                <img
-                                  src={s.logo_url}
-                                  alt={s.name}
-                                  loading="lazy"
-                                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                                />
-                              </div>
-                            )}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </section>
-                )}
-
-                {/* ══════════════════════════════════════
-                    THE INDEX — Forbes sidebar-list style
-                ══════════════════════════════════════ */}
-                {grid.length > 0 ? (
-                  <section>
-                    <div className="flex items-center gap-3 mb-6">
-                      <span className="font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-foreground">The Index</span>
-                      <div className="flex-1 h-px bg-foreground" />
-                      <span className="font-mono text-[9px] text-muted-foreground uppercase tracking-widest">
-                        {baseNum + 1}–{Math.min(baseNum + grid.length, total)} of {total.toLocaleString()}
-                      </span>
-                    </div>
-
-                    <div className="divide-y divide-border">
-                      {grid.map((s, idx) => {
-                        const rank = baseNum + idx + 1
-                        const verifiedDate = s.created_at
-                          ? new Date(s.created_at).toLocaleDateString("en-US", { month: "short", year: "numeric" }).toUpperCase()
-                          : "EST. 2026"
-
-                        return (
-                          <Link
-                            key={s.id}
-                            href={`/startup/${s.slug}`}
-                            className="group flex flex-row items-start gap-4 py-5 hover:bg-muted/30 transition-colors -mx-2 px-2"
-                          >
-                            {/* Rank number */}
-                            <div className="font-mono text-[11px] font-bold text-[#C59A2E]/50 pt-0.5 w-5 text-right shrink-0 select-none">
-                              {rank}
-                            </div>
-
-                            {/* Text — left */}
-                            <div className="flex-1 flex flex-col gap-1.5 min-w-0">
-                              <div className="flex items-center gap-2.5 flex-wrap">
-                                <span className="font-mono text-[9px] font-black uppercase tracking-[0.15em] text-[#C59A2E]">
-                                  {s.category || "Startup"}
-                                </span>
-                                {s.ufrn && (
-                                  <span className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-widest bg-muted px-1.5 py-0.5">
-                                    UFRN Assured
-                                  </span>
-                                )}
-                              </div>
-
-                              <h3
-                                className="font-bold text-[20px] md:text-[22px] leading-tight text-foreground group-hover:text-[#C59A2E] transition-colors"
-                                style={{ fontFamily: "'Georgia', serif" }}
-                              >
-                                {s.name}
-                              </h3>
-
-                              <p className="font-serif italic text-[13px] text-foreground/75 leading-relaxed line-clamp-2">
-                                {s.description || "Verified entity on the UpForge Global Registry."}
-                              </p>
-
-                              <div className="flex items-center gap-3 pt-2 border-t border-border/50 mt-1">
-                                <span className="font-mono text-[8px] font-bold text-foreground uppercase tracking-widest">
-                                  HQ: {s.city || "Global"}
-                                </span>
-                                <span className="w-px h-2.5 bg-border" />
-                                <span className="font-mono text-[8px] text-muted-foreground uppercase tracking-widest">
-                                  {s.country_code}
-                                </span>
-                                <span className="w-px h-2.5 bg-border" />
-                                <span className="font-mono text-[8px] text-muted-foreground uppercase tracking-widest">
-                                  VERIFIED {verifiedDate}
-                                </span>
-                                {s.founded_year && (
-                                  <>
-                                    <span className="w-px h-2.5 bg-border" />
-                                    <span className="font-mono text-[8px] text-muted-foreground uppercase tracking-widest">
-                                      Est. {s.founded_year}
-                                    </span>
-                                  </>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* Image — right */}
-                            <div className="shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] bg-muted overflow-hidden flex items-center justify-center">
-                              {s.logo_url ? (
-                                <img
-                                  src={s.logo_url}
-                                  alt={s.name}
-                                  loading="lazy"
-                                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                                />
-                              ) : (
-                                <span className="font-serif font-bold text-2xl text-muted-foreground/40 select-none">
-                                  {s.name.charAt(0)}
-                                </span>
-                              )}
-                            </div>
-                          </Link>
-                        )
-                      })}
-                    </div>
-                  </section>
-                ) : (
-                  <div className="text-center py-16 px-8 border-t-[2px] border-foreground">
-                    <p className="text-xl font-bold text-foreground mb-2" style={{ fontFamily: "'Georgia', serif" }}>No startups found</p>
-                    <p className="text-sm text-muted-foreground font-serif italic mb-5">
-                      {q ? `Nothing matched "${q}".` : "Try adjusting your filters."}
-                    </p>
-                    <Link href="/registry" className="inline-block bg-foreground text-background px-6 py-2.5 text-[10px] font-mono font-bold tracking-[0.15em] uppercase hover:bg-[#C59A2E] transition-colors">
-                      Clear filters
-                    </Link>
-                  </div>
-                )}
-
-                {/* ── Pagination ── */}
-                {totalPages > 1 && (
-                  <nav
-                    className="flex items-center justify-center gap-2 mt-8 border-t-[1.5px] border-foreground pt-6"
-                    aria-label="Registry pagination"
-                  >
-                    <Link
-                      href={pgHref(page - 1)}
-                      className={`py-2 px-4 text-[10px] font-bold tracking-[0.1em] uppercase border transition-colors font-mono ${
-                        page === 1
-                          ? "opacity-35 pointer-events-none border-border text-muted-foreground bg-background"
-                          : "border-border text-foreground hover:border-[#C59A2E] hover:text-[#C59A2E] bg-background"
-                      }`}
-                      aria-disabled={page === 1}
-                      rel={page > 1 ? "prev" : undefined}
-                    >
-                      Prev
-                    </Link>
-                    {pgNums.map(p => (
-                      <Link
-                        key={p}
-                        href={pgHref(p)}
-                        className={`w-9 h-9 flex items-center justify-center text-[11px] font-bold border transition-colors font-mono ${
-                          p === page
-                            ? "bg-foreground text-background border-foreground"
-                            : "border-border text-foreground hover:border-[#C59A2E] hover:text-[#C59A2E] bg-background"
-                        }`}
-                        aria-current={p === page ? "page" : undefined}
-                      >
-                        {p}
-                      </Link>
-                    ))}
-                    <Link
-                      href={pgHref(page + 1)}
-                      className={`py-2 px-4 text-[10px] font-bold tracking-[0.1em] uppercase border transition-colors font-mono ${
-                        page === totalPages
-                          ? "opacity-35 pointer-events-none border-border text-muted-foreground bg-background"
-                          : "border-border text-foreground hover:border-[#C59A2E] hover:text-[#C59A2E] bg-background"
-                      }`}
-                      aria-disabled={page === totalPages}
-                      rel={page < totalPages ? "next" : undefined}
-                    >
-                      Next
-                    </Link>
-                  </nav>
-                )}
-              </div>
-
-              {/* ══════════════════════════════════════
-                  SIDEBAR — Forbes sidebar style
-              ══════════════════════════════════════ */}
-              <aside className="sticky top-[90px] flex flex-col gap-8">
-
-                {/* Submit CTA */}
-                <div className="border-t-[2px] border-foreground pt-6 text-center">
-                  <p className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-[#C59A2E] mb-3">Get Your UFRN</p>
-                  <p className="font-bold text-xl text-foreground mb-2" style={{ fontFamily: "'Georgia', serif" }}>
-                    List your startup free
-                  </p>
-                  <p className="text-xs text-muted-foreground font-serif italic mb-4 leading-relaxed">
-                    Get independently verified. Receive your global UFRN. Trusted by investors worldwide.
-                  </p>
-                  <a
-                    href="/submit"
-                    className="inline-flex items-center justify-center w-full h-11 bg-foreground hover:bg-[#C59A2E] text-background transition-colors font-mono text-[10px] font-bold uppercase tracking-[0.15em] gap-2"
-                  >
-                    Submit Startup <ArrowRight size={12} />
-                  </a>
-                </div>
-
-                {/* UFRN explainer */}
-                <div className="border-t-[2px] border-foreground border-l-[3px] border-l-[#C59A2E] pl-4 pt-4">
-                  <p className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-[#C59A2E] mb-2">What is a UFRN?</p>
-                  <p className="font-bold text-[15px] text-foreground mb-2" style={{ fontFamily: "'Georgia', serif" }}>Your startup's global ID</p>
-                  <p className="text-xs text-muted-foreground font-serif italic leading-relaxed mb-4">
-                    A unique permanent identifier assigned to every approved startup. Shareable on LinkedIn, investor decks, and press kits.
-                  </p>
-                  <div className="font-mono text-[11px] font-bold text-foreground bg-muted py-2 px-3 text-center">
-                    UF-2026-IND-00001
-                  </div>
-                </div>
-
-                {/* Editor's Picks — Forbes sidebar style */}
-                {grid.length > 0 && (
-                  <div className="border-t-[2px] border-foreground pt-5">
-                    <div className="flex items-center justify-between mb-5">
-                      <h3 className="font-mono text-[11px] font-black uppercase tracking-widest text-[#C59A2E]">
-                        Editor's Picks
-                      </h3>
-                      <span className="font-mono text-[9px] text-muted-foreground uppercase">Live Index</span>
-                    </div>
-                    <div className="flex flex-col divide-y divide-border">
-                      {grid.slice(0, 5).map((s, i) => (
-                        <Link
-                          key={s.id}
-                          href={`/startup/${s.slug}`}
-                          className="group flex flex-row items-start justify-between gap-3 py-4 last:pb-0"
-                        >
-                          <div className="flex-1 flex flex-col gap-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                              <span className="font-mono text-[8px] font-bold text-foreground bg-muted px-1.5 py-0.5 uppercase tracking-widest shrink-0">
-                                {s.category || "Verified"}
-                              </span>
-                              <span className="font-serif italic text-muted-foreground/50 text-[10px] ml-auto shrink-0">
-                                No. {i + 1}
-                              </span>
-                            </div>
-                            <h4
-                              className="font-bold text-[16px] leading-tight text-foreground group-hover:text-[#C59A2E] transition-colors"
-                              style={{ fontFamily: "'Georgia', serif" }}
-                            >
-                              {s.name}
-                            </h4>
-                            <p className="font-serif text-[11px] text-foreground/70 leading-snug line-clamp-2">
-                              {s.description || "A verified entry in the global registry."}
-                            </p>
-                          </div>
-                          {s.logo_url && (
-                            <div className="w-12 h-12 shrink-0 bg-muted overflow-hidden mt-0.5">
-                              <img
-                                src={s.logo_url}
-                                alt=""
-                                className="w-full h-full object-cover transition-transform group-hover:scale-[1.05]"
-                              />
-                            </div>
-                          )}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Trending Sectors (Sidebar) */}
-                <div className="border-t-[2px] border-foreground pt-5">
-                  <div className="flex items-center gap-1.5 mb-4">
-                    <TrendingUp size={12} className="text-[#C59A2E]" />
-                    <p className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-foreground">Trending Sectors</p>
-                  </div>
-                  <ul className="flex flex-col gap-0 m-0 p-0 list-none divide-y divide-border">
-                    {TRENDING_SECTORS.slice(0, 8).map(c => (
-                      <li key={c}>
-                        <Link
-                          href={`/registry?sector=${encodeURIComponent(c)}`}
-                          className="flex items-center justify-between py-2.5 text-sm text-foreground font-serif italic hover:text-[#C59A2E] transition-colors"
-                        >
-                          <span>{c}</span>
-                          <ArrowRight size={11} className="opacity-40 shrink-0" />
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Browse by Country */}
-                {countries.length > 0 && (
-                  <div className="border-t-[2px] border-foreground pt-5">
-                    <p className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-foreground mb-4">Browse by Country</p>
-                    <ul className="flex flex-col gap-0 m-0 p-0 list-none divide-y divide-border">
-                      {countries.slice(0, 8).map(ct => (
-                        <li key={ct.code}>
-                          <Link
-                            href={`/registry?country=${encodeURIComponent(ct.code)}`}
-                            className="flex items-center justify-between py-2.5 text-sm text-foreground font-serif italic hover:text-[#C59A2E] transition-colors"
-                          >
-                            <span>{ct.name}</span>
-                            <span className="font-mono text-[9px] font-bold text-[#C59A2E]">{ct.code}</span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-              </aside>
-            </div>
-
-            {/* ── Bottom CTA ── */}
-            <div className="mt-12 border-t-[2px] border-foreground pt-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-              <div className="max-w-xl">
-                <p className="font-mono text-[9px] font-bold uppercase tracking-[0.25em] text-[#C59A2E] mb-3">UpForge Global Registry</p>
-                <h2 className="text-2xl sm:text-3xl font-black text-foreground mb-3" style={{ fontFamily: "'Georgia', serif" }}>
-                  Your founder story starts with a verified profile.
-                </h2>
-                <p className="font-serif italic text-base text-muted-foreground">
-                  Get your UFRN. Free forever. Trusted by investors and press worldwide.
-                </p>
-              </div>
-              <a
-                href="/submit"
-                className="shrink-0 inline-flex items-center gap-3 border-[1.5px] border-foreground bg-foreground hover:bg-[#C59A2E] text-background py-3.5 px-7 font-bold uppercase tracking-[0.15em] font-mono transition-colors whitespace-nowrap"
-              >
-                List Free — Get UFRN <ArrowRight size={14} />
-              </a>
-            </div>
-
-            {/* ── Footer links ── */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-0 mt-10 border-t-[1.5px] border-foreground divide-y lg:divide-y-0 lg:divide-x divide-foreground">
-              {[
-                { label: "Global Registry",         sub: "Full verified database",   href: "/registry" },
-                { label: "Indian Startup Founders",  sub: "Founder Chronicle 2026",  href: "/archive"  },
-                { label: "The Forge Blog",           sub: "Startup intelligence",     href: "/blog"     },
-                { label: "Submit Your Startup",      sub: "Get listed + UFRN free",  href: "/submit"   },
-              ].map(lnk => (
-                <a key={lnk.href} href={lnk.href} className="p-5 hover:bg-muted transition-colors group flex flex-col justify-center h-full">
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-foreground mb-1 group-hover:text-[#C59A2E] transition-colors">{lnk.label}</span>
-                  <span className="text-[11px] text-muted-foreground font-serif italic">{lnk.sub}</span>
-                </a>
-              ))}
-            </div>
-
+          
+          <div className="glass-panel p-6 rounded-2xl border border-[var(--glass-border)] flex flex-col gap-2 min-w-[220px]">
+            <span className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Total Verified Listings</span>
+            <span className="text-4xl font-mono font-bold text-accent-gold text-glow">{total.toLocaleString()}</span>
           </div>
         </div>
       </div>
 
-      {/* ── Client-side JS (with autocomplete) ── */}
+      {/* ── Search Toolbar ── */}
+      <div className="sticky top-0 z-30 bg-background/80 backdrop-blur-xl border-b border-[var(--glass-border)] shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          
+          <div className="relative" id="search-wrapper">
+            <form action="/registry" method="GET" className="relative group" id="search-form">
+              {year    && <input type="hidden" name="year"    value={year} />}
+              {cat     && <input type="hidden" name="sector"  value={cat} />}
+              {country && <input type="hidden" name="country" value={country} />}
+              {sort && sort !== "name" && <input type="hidden" name="sort" value={sort} />}
+              
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-accent-primary transition-colors pointer-events-none" />
+              <input
+                type="search"
+                name="q"
+                defaultValue={q}
+                id="search-input"
+                className="w-full bg-muted/40 border border-[var(--glass-border)] rounded-full pl-12 pr-36 py-3.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent-primary/50 focus:border-accent-primary/50 transition-all font-light"
+                placeholder={`Search ${total.toLocaleString()} records by name, sector, city, or UFRN...`}
+                aria-label="Search global registry"
+                autoComplete="off"
+              />
+              <button
+                type="submit"
+                className="absolute right-1.5 top-1.5 bottom-1.5 bg-accent-primary hover:bg-blue-600 text-white text-xs font-bold uppercase tracking-wider px-6 rounded-full transition-colors shadow-[0_0_15px_rgba(59,130,246,0.5)] cursor-pointer"
+              >
+                Search
+              </button>
+            </form>
+
+            <div
+              id="autocomplete-dropdown"
+              className="absolute left-0 right-0 top-full mt-2 bg-card/95 backdrop-blur-xl border border-[var(--glass-border)] rounded-2xl shadow-2xl overflow-hidden z-50 hidden"
+            />
+          </div>
+
+          {/* Filter toggle & Sort Toolbar */}
+          <div className="flex items-center justify-between gap-4 flex-wrap mt-4">
+            <button
+              type="button"
+              id="filter-toggle-btn"
+              aria-expanded="false"
+              aria-controls="filter-panel"
+              className={`inline-flex items-center gap-2 h-9 px-4 rounded-full border text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                activeFilterCount > 0
+                  ? "border-accent-gold text-accent-gold bg-accent-gold/10"
+                  : "border-[var(--glass-border)] text-muted-foreground hover:text-foreground hover:bg-muted/40"
+              }`}
+            >
+              <Filter className="w-3.5 h-3.5" />
+              Filters
+              {activeFilterCount > 0 && (
+                <span className="bg-accent-gold text-black rounded-full px-2 py-0.5 text-[10px] font-bold">
+                  {activeFilterCount}
+                </span>
+              )}
+            </button>
+
+            {/* Sort options */}
+            <div className="flex items-center gap-2 overflow-x-auto py-1">
+              <span className="text-xs text-muted-foreground font-medium mr-1 hidden sm:inline">Sort:</span>
+              {[
+                { label: "A–Z",     val: "name"   },
+                { label: "Newest",  val: "newest" },
+                { label: "Founded", val: "year"   },
+              ].map(s => (
+                <Link
+                  key={s.val}
+                  href={qs({ sort: s.val, page: undefined })}
+                  className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+                    sort === s.val
+                      ? "bg-accent-primary text-white shadow-sm"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                  }`}
+                >
+                  {s.label}
+                </Link>
+              ))}
+              {isFiltered && (
+                <Link
+                  href="/registry"
+                  className="px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-accent-gold hover:bg-accent-gold/10 transition-colors flex items-center gap-1 ml-2"
+                >
+                  <X className="w-3 h-3" /> Clear
+                </Link>
+              )}
+            </div>
+          </div>
+
+          {/* Slide-down Filter Panel */}
+          <div
+            id="filter-panel"
+            role="region"
+            aria-label="Filters"
+            className="filter-panel-wrap overflow-hidden max-h-0 opacity-0 transition-all duration-300 pointer-events-none"
+          >
+            <div className="bg-card border border-[var(--glass-border)] rounded-2xl p-5 mt-4 shadow-lg flex flex-wrap gap-4 items-end">
+              <div className="flex flex-col gap-1.5 flex-1 min-w-[180px]">
+                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground" htmlFor="rg-year-sel">Founded Year</label>
+                <select id="rg-year-sel" className="h-10 bg-background border border-[var(--glass-border)] rounded-xl text-xs text-foreground px-3 focus:outline-none focus:ring-2 focus:ring-accent-primary/50">
+                  <option value="">Any Year</option>
+                  {years.map(yr => (
+                    <option key={yr} value={String(yr)} selected={year === String(yr)}>{yr}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1.5 flex-1 min-w-[180px]">
+                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground" htmlFor="rg-cat-sel">Sector</label>
+                <select id="rg-cat-sel" className="h-10 bg-background border border-[var(--glass-border)] rounded-xl text-xs text-foreground px-3 focus:outline-none focus:ring-2 focus:ring-accent-primary/50">
+                  <option value="">All Sectors</option>
+                  {cats.map(c => (
+                    <option key={c} value={c} selected={cat === c}>{c}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1.5 flex-1 min-w-[180px]">
+                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground" htmlFor="rg-country-sel">Country</label>
+                <select id="rg-country-sel" className="h-10 bg-background border border-[var(--glass-border)] rounded-xl text-xs text-foreground px-3 focus:outline-none focus:ring-2 focus:ring-accent-primary/50">
+                  <option value="">All Countries</option>
+                  {countries.map(ct => (
+                    <option key={ct.code} value={ct.code} selected={country === ct.code}>
+                      {ct.name} ({ct.code})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {isFiltered && (
+                <Link href="/registry" className="h-10 bg-accent-gold hover:bg-amber-600 text-black font-bold uppercase tracking-wider text-xs px-5 rounded-xl flex items-center justify-center transition-colors">
+                  Clear All
+                </Link>
+              )}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* ── MAIN CONTENT AREA ── */}
+      <div className="max-w-7xl mx-auto px-6 py-12 grid lg:grid-cols-12 gap-12">
+        
+        {/* Results Stream */}
+        <div className="lg:col-span-8">
+          
+          <div className="flex items-center justify-between mb-8 pb-4 border-b border-[var(--glass-border)]">
+            <h2 className="results-q text-sm font-bold uppercase tracking-widest text-muted-foreground">
+              {q ? `Search Results for "${q}"` : cat ? `${cat} Directory` : country ? `${country} Startups` : "Verified Directory"}
+            </h2>
+            <span className="text-xs text-muted-foreground">
+              Showing {grid.length > 0 ? baseNum + 1 : 0}–{Math.min(baseNum + grid.length, total)} of {total.toLocaleString()}
+            </span>
+          </div>
+
+          {/* Featured Section (Page 1 without active filters) */}
+          {featured.length > 0 && (
+            <div className="mb-10 space-y-4">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-xs font-bold uppercase tracking-widest text-accent-gold px-3 py-1 rounded-full bg-accent-gold/10 border border-accent-gold/20">
+                  Featured Profiles
+                </span>
+              </div>
+              <div className="grid gap-4">
+                {featured.map(s => (
+                  <Link
+                    key={s.id}
+                    href={`/startup/${s.slug}`}
+                    className="glass-card group flex flex-col sm:flex-row items-start sm:items-center p-6 gap-6 rounded-2xl border border-accent-gold/30 bg-gradient-to-r from-accent-gold/5 via-card to-card shadow-md hover:shadow-lg transition-all"
+                  >
+                    <div className="w-16 h-16 rounded-xl bg-muted/50 border border-accent-gold/30 flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:border-accent-gold transition-colors">
+                      {s.logo_url ? (
+                        <img src={s.logo_url} alt={s.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                      ) : (
+                        <span className="font-bold text-xl text-accent-gold">{s.name.charAt(0)}</span>
+                      )}
+                    </div>
+
+                    <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+                      <div className="flex items-center gap-2.5 flex-wrap">
+                        <h3 className="text-xl font-bold text-foreground group-hover:text-accent-gold transition-colors truncate">{s.name}</h3>
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-accent-gold border border-accent-gold/20 px-2.5 py-0.5 rounded-full bg-accent-gold/10">Featured</span>
+                        {s.category && <span className="text-[10px] uppercase tracking-widest font-bold text-accent-primary border border-accent-primary/20 px-2.5 py-0.5 rounded-full bg-accent-primary/10">{s.category}</span>}
+                      </div>
+                      <p className="text-sm text-muted-foreground line-clamp-2">{s.description}</p>
+                      <div className="flex items-center gap-4 mt-1 text-xs font-medium text-muted-foreground">
+                        {s.city && <span className="flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-accent-secondary" /> {s.city}</span>}
+                        {s.founded_year && <span>Est. {s.founded_year}</span>}
+                        {s.ufrn && <span className="font-mono text-accent-gold">UFRN Verified</span>}
+                      </div>
+                    </div>
+
+                    <div className="hidden sm:flex flex-shrink-0 w-12 h-12 rounded-full border border-accent-gold/30 items-center justify-center group-hover:bg-accent-gold group-hover:text-black text-accent-gold transition-all">
+                      <ArrowUpRight className="w-5 h-5" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Directory Grid (Separated Floating Cards) */}
+          {grid.length > 0 ? (
+            <div className="space-y-4">
+              {grid.map((s, idx) => (
+                <Link
+                  key={s.id}
+                  href={`/startup/${s.slug}`}
+                  className="glass-card group flex flex-col sm:flex-row items-start sm:items-center p-5 gap-6 rounded-2xl border border-[var(--glass-border)] bg-card shadow-sm hover:shadow-md transition-all hover:border-accent-primary/50"
+                >
+                  <div className="w-16 h-16 rounded-xl bg-muted/40 border border-[var(--glass-border)] flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:border-accent-primary/50 transition-colors">
+                    {s.logo_url ? (
+                      <img
+                        src={s.logo_url}
+                        alt={s.name}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <span className="font-bold text-xl text-muted-foreground">{s.name.charAt(0)}</span>
+                    )}
+                  </div>
+                  
+                  <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2.5 flex-wrap">
+                      <h3 className="text-lg font-bold text-foreground group-hover:text-accent-primary transition-colors truncate">{s.name}</h3>
+                      {s.is_featured && (
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-accent-gold border border-accent-gold/20 px-2.5 py-0.5 rounded-full bg-accent-gold/10">Featured</span>
+                      )}
+                      {s.category && (
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-accent-primary border border-accent-primary/20 px-2.5 py-0.5 rounded-full bg-accent-primary/10">
+                          {s.category}
+                        </span>
+                      )}
+                      {s.ufrn && (
+                        <span className="text-[10px] font-mono font-bold text-muted-foreground border border-border px-2 py-0.5 rounded-full bg-muted">
+                          {s.ufrn}
+                        </span>
+                      )}
+                    </div>
+
+                    <p className="text-sm text-muted-foreground line-clamp-2">{s.description || "Verified entity on the UpForge Global Startup Registry."}</p>
+                    
+                    <div className="flex flex-wrap items-center gap-4 mt-1 text-xs font-medium text-muted-foreground">
+                      {s.city && (
+                        <span className="flex items-center gap-1.5">
+                          <ShieldCheck className="w-3.5 h-3.5 text-accent-secondary" /> {s.city}{s.country_code ? `, ${s.country_code}` : ''}
+                        </span>
+                      )}
+                      {s.founded_year && <span>Est. {s.founded_year}</span>}
+                    </div>
+                  </div>
+                  
+                  <div className="hidden sm:flex flex-shrink-0 w-12 h-12 rounded-full border border-[var(--glass-border)] items-center justify-center group-hover:bg-accent-primary group-hover:text-white text-muted-foreground transition-all">
+                    <ArrowRight className="w-5 h-5 -rotate-45" />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="glass-panel rounded-2xl p-16 text-center border-dashed border-[var(--glass-border)]">
+              <span className="text-4xl text-muted-foreground mb-4 block">∅</span>
+              <h3 className="text-xl font-bold text-foreground mb-2">No profiles found</h3>
+              <p className="text-muted-foreground mb-6">Try adjusting your search criteria or clear the filters to see all registry records.</p>
+              <Link href="/registry" className="inline-block bg-accent-primary text-white font-bold uppercase tracking-wider text-xs px-6 py-3 rounded-full hover:bg-blue-600 transition-colors">
+                Clear Filters
+              </Link>
+            </div>
+          )}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-12 pt-8 border-t border-[var(--glass-border)]">
+              <Link
+                href={pgHref(page - 1)}
+                className={`px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-full border border-[var(--glass-border)] transition-colors ${
+                  page === 1 ? 'opacity-50 pointer-events-none' : 'hover:bg-muted/40 hover:text-foreground'
+                } text-muted-foreground`}
+              >
+                Prev
+              </Link>
+              {pgNums.map(p => (
+                <Link
+                  key={p}
+                  href={pgHref(p)}
+                  className={`w-10 h-10 flex items-center justify-center text-sm font-bold rounded-full transition-all ${
+                    p === page
+                      ? 'bg-accent-primary text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]'
+                      : 'border border-[var(--glass-border)] text-muted-foreground hover:bg-muted/40 hover:text-foreground'
+                  }`}
+                >
+                  {p}
+                </Link>
+              ))}
+              <Link
+                href={pgHref(page + 1)}
+                className={`px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-full border border-[var(--glass-border)] transition-colors ${
+                  page === totalPages ? 'opacity-50 pointer-events-none' : 'hover:bg-muted/40 hover:text-foreground'
+                } text-muted-foreground`}
+              >
+                Next
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Sidebar Cards */}
+        <div className="lg:col-span-4 space-y-8">
+          
+          {/* Card 1: Free Listing */}
+          <div className="glass-panel p-8 rounded-3xl relative overflow-hidden text-center bg-[var(--glass-bg)] border border-[var(--glass-border)] shadow-sm">
+            <div className="absolute inset-0 bg-gradient-neon opacity-10 blur-2xl pointer-events-none" />
+            <h3 className="text-xs font-bold uppercase tracking-widest text-accent-gold mb-2 relative z-10">Free Listing</h3>
+            <h4 className="text-xl font-bold text-foreground mb-3 relative z-10">Add your startup to the registry</h4>
+            <p className="text-xs text-muted-foreground mb-5 relative z-10">Get independently verified. Receive your global UFRN identifier.</p>
+            <Link
+              href="/submit"
+              className="inline-block bg-foreground text-background font-bold uppercase tracking-widest text-xs px-6 py-3 rounded-full hover:bg-accent-gold hover:text-white transition-colors relative z-10 shadow-sm"
+            >
+              Submit Directory →
+            </Link>
+          </div>
+
+          {/* Card 2: Registry Intelligence */}
+          <div className="border border-[var(--glass-border)] p-6 rounded-3xl bg-muted/40 shadow-sm">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Registry Intelligence</h3>
+            <ul className="space-y-4">
+              <li className="flex justify-between items-center pb-4 border-b border-border">
+                <span className="text-sm text-foreground">Verified Coverage</span>
+                <span className="text-sm font-bold text-accent-primary">100%</span>
+              </li>
+              <li className="flex justify-between items-center pb-4 border-b border-border">
+                <span className="text-sm text-foreground">Pricing</span>
+                <span className="text-sm font-bold text-accent-primary">Free forever</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span className="text-sm text-foreground">Authority Trust</span>
+                <span className="text-sm font-bold text-accent-gold">UpForge Certified</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Card 3: What is a UFRN? */}
+          <div className="border border-[var(--glass-border)] p-6 rounded-3xl bg-muted/40 shadow-sm">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-accent-gold mb-2">What is a UFRN?</h3>
+            <h4 className="text-base font-bold text-foreground mb-2">Your startup's global ID</h4>
+            <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+              A unique permanent identifier assigned to every approved startup. Shareable on LinkedIn, pitch decks, and investor diligence.
+            </p>
+            <div className="font-mono text-xs font-bold text-accent-primary bg-background border border-[var(--glass-border)] py-2.5 px-4 rounded-xl text-center shadow-inner">
+              UF-2026-IND-00001
+            </div>
+          </div>
+
+          {/* Card 4: Browse Sectors */}
+          {cats.length > 0 && (
+            <div className="border border-[var(--glass-border)] p-6 rounded-3xl bg-muted/40 shadow-sm">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Explore Sectors</h3>
+              <div className="flex flex-col gap-1 max-h-[320px] overflow-y-auto pr-1">
+                {cats.slice(0, 12).map(c => (
+                  <Link
+                    key={c}
+                    href={`/registry?sector=${encodeURIComponent(c)}`}
+                    className="text-sm text-foreground hover:text-accent-primary py-2 border-b border-border/50 last:border-0 flex items-center justify-between group transition-colors"
+                  >
+                    <span>{c}</span>
+                    <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all text-accent-primary" />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Card 5: Browse Countries */}
+          {countries.length > 0 && (
+            <div className="border border-[var(--glass-border)] p-6 rounded-3xl bg-muted/40 shadow-sm">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Browse by Country</h3>
+              <div className="flex flex-col gap-1 max-h-[280px] overflow-y-auto pr-1">
+                {countries.slice(0, 10).map(ct => (
+                  <Link
+                    key={ct.code}
+                    href={`/registry?country=${encodeURIComponent(ct.code)}`}
+                    className="text-sm text-foreground hover:text-accent-primary py-2 border-b border-border/50 last:border-0 flex items-center justify-between group transition-colors"
+                  >
+                    <span>{ct.name}</span>
+                    <span className="font-mono text-xs font-bold text-accent-gold">{ct.code}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+        </div>
+      </div>
+
+      {/* ── Client-side Filter & Autocomplete JavaScript ── */}
       <script dangerouslySetInnerHTML={{ __html: `
         (function () {
-          // Filter toggle
           var btn     = document.getElementById('filter-toggle-btn');
           var panel   = document.getElementById('filter-panel');
-          var chevron = document.getElementById('filter-chevron');
 
           if (btn && panel) {
             var hasActive = ${activeFilterCount > 0 ? "true" : "false"};
 
             function openPanel() {
-              panel.classList.remove('max-h-0','opacity-0','pointer-events-none','mt-0');
+              panel.classList.remove('max-h-0','opacity-0','pointer-events-none');
               panel.classList.add('max-h-[400px]','opacity-100','pointer-events-auto');
               btn.setAttribute('aria-expanded','true');
-              if (chevron) chevron.style.transform = 'rotate(180deg)';
             }
             function closePanel() {
-              panel.classList.add('max-h-0','opacity-0','pointer-events-none','mt-0');
+              panel.classList.add('max-h-0','opacity-0','pointer-events-none');
               panel.classList.remove('max-h-[400px]','opacity-100','pointer-events-auto');
               btn.setAttribute('aria-expanded','false');
-              if (chevron && !hasActive) chevron.style.transform = '';
             }
 
             if (hasActive) openPanel();
@@ -1033,7 +764,7 @@ export default async function RegistryPage({ searchParams }: PageProps) {
             window.location.href = buildUrl(c);
           });
 
-          // ─── AUTOCOMPLETE FROM GOOGLE SHEETS ───
+          // Autocomplete
           var searchInput = document.getElementById('search-input');
           var dropdown = document.getElementById('autocomplete-dropdown');
           var debounceTimer;
@@ -1050,17 +781,17 @@ export default async function RegistryPage({ searchParams }: PageProps) {
 
               debounceTimer = setTimeout(function() {
                 fetch('/api/registry/suggestions?q=' + encodeURIComponent(query))
-                  .then(res => res.json())
-                  .then(data => {
+                  .then(function(res) { return res.json(); })
+                  .then(function(data) {
                     if (data.suggestions && data.suggestions.length > 0) {
                       dropdown.innerHTML = '<div class="p-2">' + 
-                        data.suggestions.map(s => 
-                          '<button type="button" class="w-full text-left px-3 py-2 hover:bg-muted text-sm font-serif italic transition-colors border-b border-border last:border-0" data-suggestion="' + s.replace(/"/g, '&quot;') + '">' + s + '</button>'
-                        ).join('') + 
+                        data.suggestions.map(function(s) {
+                          return '<button type="button" class="w-full text-left px-4 py-2.5 hover:bg-muted text-sm font-medium transition-colors border-b border-border/50 last:border-0 flex items-center justify-between" data-suggestion="' + s.replace(/"/g, '&quot;') + '"><span>' + s + '</span><span class="text-xs text-muted-foreground">↗</span></button>';
+                        }).join('') + 
                         '</div>';
                       dropdown.classList.remove('hidden');
                       
-                      dropdown.querySelectorAll('button').forEach(btn => {
+                      dropdown.querySelectorAll('button').forEach(function(btn) {
                         btn.addEventListener('click', function() {
                           searchInput.value = this.dataset.suggestion;
                           dropdown.classList.add('hidden');
@@ -1071,7 +802,7 @@ export default async function RegistryPage({ searchParams }: PageProps) {
                       dropdown.classList.add('hidden');
                     }
                   })
-                  .catch(() => dropdown.classList.add('hidden'));
+                  .catch(function() { dropdown.classList.add('hidden'); });
               }, 300);
             });
 
