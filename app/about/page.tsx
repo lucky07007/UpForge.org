@@ -1,4 +1,4 @@
-// app/about/page.tsx
+// app/about/page.tsx — UpForge About & Verification Methodology
 import { fetchAllStartups } from "@/lib/google-sheets"
 import { SITE_STATS } from "@/lib/site-stats"
 import Link from "next/link"
@@ -6,7 +6,7 @@ import { Navbar } from "@/components/navbar"
 import type { Metadata } from "next"
 import {
   ShieldCheck, Award, FileText, CheckCircle2, Globe, ArrowRight,
-  Sparkles, Building2, Users, AlertCircle, HelpCircle, Mail, MapPin, Scale
+  Sparkles, Building2, Users, AlertCircle, HelpCircle, Mail, MapPin, Scale, XCircle
 } from "lucide-react"
 
 import { Reveal } from "@/components/about/reveal"
@@ -89,35 +89,34 @@ export default async function AboutPage() {
 
       <Navbar />
 
-      <div className="bg-background text-foreground min-h-screen font-serif overflow-x-hidden">
+      <div className="bg-background text-foreground min-h-screen font-serif overflow-x-hidden selection:bg-[#C59A2E]/20">
         
-
         {/* 1. HERO SECTION */}
-        <section className="border-b-2 border-foreground max-w-[1200px] mx-auto px-4 md:px-8 pt-12 pb-12 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-muted border border-[#C59A2E]/40 mb-6">
-            <Sparkles className="w-3.5 h-3.5 text-[#C59A2E]" />
-            <span className="text-[10px] font-mono font-bold text-[#C59A2E] uppercase tracking-widest">
-              Institutional Startup Registry
+        <section className="border-b-[2px] border-foreground max-w-[1200px] mx-auto px-4 md:px-8 pt-10 pb-12 text-center flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-muted border border-[#C59A2E]/40 mb-5">
+            <Sparkles className="w-3.5 h-3.5 text-[#C59A2E] animate-pulse" />
+            <span className="text-[10px] font-mono font-bold text-[#C59A2E] uppercase tracking-[0.2em]">
+              INSTITUTIONAL STARTUP REGISTRY
             </span>
           </div>
 
           <h1
-            className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 max-w-4xl mx-auto tracking-tight"
+            className="text-3xl md:text-5xl lg:text-[56px] font-bold leading-[1.06] mb-4 max-w-4xl mx-auto tracking-tight text-foreground"
             style={{ fontFamily: "'Georgia', serif" }}
           >
             The Independent Global Registry for Verified Startups
           </h1>
 
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-serif italic">
+          <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed font-serif italic mb-8">
             UpForge provides standardized, permanent public records for emerging ventures worldwide — establishing trust, legibility, and identity without sponsored bias or algorithmic distortion.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-4 pt-8">
+          <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/submit"
               className="inline-flex items-center gap-2 bg-foreground hover:bg-[#C59A2E] text-background py-3.5 px-8 font-bold uppercase tracking-[0.15em] text-xs font-mono transition-colors"
             >
-              Get Listed <ArrowRight size={14} />
+              Get Listed Free <ArrowRight size={14} />
             </Link>
             <Link
               href="/partner-program"
@@ -128,48 +127,48 @@ export default async function AboutPage() {
           </div>
         </section>
 
-        <main className="max-w-[1200px] mx-auto px-6 py-16 space-y-20">
+        <main className="max-w-[1200px] mx-auto px-4 md:px-8 py-14 space-y-16">
 
           {/* 2. WHAT UPFORGE IS / IS NOT */}
           <Reveal as="section">
             <div className="flex items-center gap-3 mb-8">
-              <span className="text-[#C59A2E] font-mono text-xs">01 /</span>
-              <h2 className="font-sans font-black text-xs uppercase tracking-widest text-foreground">Positioning & Definition</h2>
+              <span className="text-[#C59A2E] font-mono text-xs font-bold">01 /</span>
+              <h2 className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-foreground">Positioning & Definition</h2>
               <div className="flex-1 h-px bg-border" />
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 border border-border p-8 bg-card">
-              <div>
-                <h3 className="font-serif text-2xl font-bold text-foreground mb-4">What UpForge Is</h3>
+            <div className="grid md:grid-cols-2 gap-8 border border-border p-6 md:p-8 bg-card shadow-sm">
+              <div className="space-y-4">
+                <h3 className="font-serif text-2xl font-bold text-foreground">What UpForge Is</h3>
                 <ul className="space-y-3 font-serif text-sm text-muted-foreground leading-relaxed">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#C59A2E] shrink-0 mt-0.5" />
+                  <li className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-[#C59A2E] shrink-0 mt-1" />
                     <span><strong>An Independent Registry:</strong> A standardized repository of corporate identity, founding timeline, and verified sector taxonomy.</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#C59A2E] shrink-0 mt-0.5" />
+                  <li className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-[#C59A2E] shrink-0 mt-1" />
                     <span><strong>A Digital Credential Issuer:</strong> Issuing audit-ready UpForge Registry Numbers (UFRN) to qualified startup entities.</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#C59A2E] shrink-0 mt-0.5" />
+                  <li className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-[#C59A2E] shrink-0 mt-1" />
                     <span><strong>An Ecosystem Intelligence Layer:</strong> Providing transparent data for analysts, venture capital researchers, and partners.</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="border-t md:border-t-0 md:border-l border-border pt-6 md:pt-0 md:pl-8">
-                <h3 className="font-serif text-2xl font-bold text-foreground mb-4">What UpForge Is Not</h3>
+              <div className="border-t md:border-t-0 md:border-l border-border pt-6 md:pt-0 md:pl-8 space-y-4">
+                <h3 className="font-serif text-2xl font-bold text-foreground">What UpForge Is Not</h3>
                 <ul className="space-y-3 font-serif text-sm text-muted-foreground leading-relaxed">
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-500 font-bold shrink-0">✕</span>
+                  <li className="flex items-start gap-2.5">
+                    <XCircle className="w-4 h-4 text-red-500 shrink-0 mt-1" />
                     <span><strong>Not a Pay-to-Rank Directory:</strong> We do not sell featured placement, search rank boosts, or arbitrary leaderboard scores.</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-500 font-bold shrink-0">✕</span>
+                  <li className="flex items-start gap-2.5">
+                    <XCircle className="w-4 h-4 text-red-500 shrink-0 mt-1" />
                     <span><strong>Not a Government Authority:</strong> UFRN is a registry credential, not an official government incorporation or tax registration.</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-500 font-bold shrink-0">✕</span>
+                  <li className="flex items-start gap-2.5">
+                    <XCircle className="w-4 h-4 text-red-500 shrink-0 mt-1" />
                     <span><strong>Not an Investment Brokerage:</strong> We do not broker securities, promise funding rounds, or execute financial transactions.</span>
                   </li>
                 </ul>
@@ -180,8 +179,8 @@ export default async function AboutPage() {
           {/* 3. HOW WE VERIFY & LEGAL DISCLAIMER */}
           <Reveal as="section">
             <div className="flex items-center gap-3 mb-8">
-              <span className="text-[#C59A2E] font-mono text-xs">02 /</span>
-              <h2 className="font-sans font-black text-xs uppercase tracking-widest text-foreground">Verification Methodology</h2>
+              <span className="text-[#C59A2E] font-mono text-xs font-bold">02 /</span>
+              <h2 className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-foreground">Verification Methodology</h2>
               <div className="flex-1 h-px bg-border" />
             </div>
 
@@ -193,19 +192,19 @@ export default async function AboutPage() {
                   { num: "03", title: "Founder Professional Records", desc: "Cross-referencing founder profiles on LinkedIn and public professional repositories." },
                   { num: "04", title: "Funding & Public Signals", desc: "Verifying press coverage, institutional disclosures, and verified customer signals." }
                 ].map((m, i) => (
-                  <div key={i} className="p-6 border border-border bg-background">
+                  <div key={i} className="p-6 border border-border bg-card hover:border-[#C59A2E] transition-colors">
                     <span className="font-mono text-xs text-[#C59A2E] font-bold block mb-2">{m.num}</span>
-                    <h4 className="font-sans font-bold text-sm uppercase tracking-wider mb-2">{m.title}</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{m.desc}</p>
+                    <h4 className="font-mono text-xs font-bold uppercase tracking-wider mb-2 text-foreground">{m.title}</h4>
+                    <p className="text-xs text-muted-foreground leading-relaxed font-serif">{m.desc}</p>
                   </div>
                 ))}
               </div>
 
               {/* Legal Disclaimer Box */}
-              <div className="p-6 border-l-4 border-[#C59A2E] bg-muted/30">
+              <div className="p-6 border-l-4 border-[#C59A2E] bg-muted/40 border-t border-r border-b border-border">
                 <div className="flex items-center gap-2 mb-2">
                   <Scale className="w-4 h-4 text-[#C59A2E]" />
-                  <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-foreground">Official Regulatory & Legal Disclaimer</h4>
+                  <h4 className="font-mono font-bold text-xs uppercase tracking-wider text-foreground">Official Regulatory & Legal Disclaimer</h4>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed font-serif">
                   UFRN is an independent registry credential issued by UpForge.org for digital identity and registry verification. It is not a legal business incorporation certificate, government tax identifier, or official regulatory registration, and does not replace statutory business incorporation documents.
@@ -217,33 +216,33 @@ export default async function AboutPage() {
           {/* 4. BY THE NUMBERS (DYNAMIC DUAL-SOURCE STATS) */}
           <Reveal as="section">
             <div className="flex items-center gap-3 mb-8">
-              <span className="text-[#C59A2E] font-mono text-xs">03 /</span>
-              <h2 className="font-sans font-black text-xs uppercase tracking-widest text-foreground">Registry Scale & Metrics</h2>
+              <span className="text-[#C59A2E] font-mono text-xs font-bold">03 /</span>
+              <h2 className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-foreground">Registry Scale & Metrics</h2>
               <div className="flex-1 h-px bg-border" />
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border border-border p-8 bg-card text-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border border-border p-8 bg-card text-center shadow-sm">
               <div>
                 <span className="font-mono text-3xl md:text-4xl font-bold text-[#C59A2E]">
                   {totalStartups > 0 ? totalStartups.toLocaleString() : "1,200+"}
                 </span>
-                <p className="text-[10px] font-sans font-bold uppercase tracking-wider text-muted-foreground mt-2">Verified Companies</p>
+                <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground mt-2">Verified Companies</p>
               </div>
               <div>
                 <span className="font-mono text-3xl md:text-4xl font-bold text-[#C59A2E]">
                   {totalCountries > 0 ? totalCountries : "35"}
                 </span>
-                <p className="text-[10px] font-sans font-bold uppercase tracking-wider text-muted-foreground mt-2">Global Markets</p>
+                <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground mt-2">Global Markets</p>
               </div>
               <div>
                 <span className="font-mono text-3xl md:text-4xl font-bold text-[#C59A2E]">
                   {totalSectors > 0 ? totalSectors : "28"}
                 </span>
-                <p className="text-[10px] font-sans font-bold uppercase tracking-wider text-muted-foreground mt-2">Industry Sectors</p>
+                <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground mt-2">Industry Sectors</p>
               </div>
               <div>
                 <span className="font-mono text-3xl md:text-4xl font-bold text-[#C59A2E]">100%</span>
-                <p className="text-[10px] font-sans font-bold uppercase tracking-wider text-muted-foreground mt-2">Independent Index</p>
+                <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground mt-2">Independent Index</p>
               </div>
             </div>
           </Reveal>
@@ -251,14 +250,14 @@ export default async function AboutPage() {
           {/* 5. EDITORIAL & REVIEW STANDARDS */}
           <Reveal as="section">
             <div className="flex items-center gap-3 mb-8">
-              <span className="text-[#C59A2E] font-mono text-xs">04 /</span>
-              <h2 className="font-sans font-black text-xs uppercase tracking-widest text-foreground">Editorial Governance</h2>
+              <span className="text-[#C59A2E] font-mono text-xs font-bold">04 /</span>
+              <h2 className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-foreground">Editorial Governance</h2>
               <div className="flex-1 h-px bg-border" />
             </div>
 
-            <div className="p-8 border border-border bg-background space-y-4">
+            <div className="p-8 border border-border bg-card space-y-4 shadow-sm">
               <h3 className="text-xl font-bold font-serif text-foreground">Independence & Non-Interference Policy</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed font-serif">
                 UpForge maintains a strict wall between data verification and commercial partnerships. We never accept financial compensation to alter a company's verification record, boost search visibility, or modify registry criteria.
               </p>
               <div className="pt-2">
@@ -272,14 +271,14 @@ export default async function AboutPage() {
           {/* 6. TEAM & WHO IS BEHIND UPFORGE */}
           <Reveal as="section">
             <div className="flex items-center gap-3 mb-8">
-              <span className="text-[#C59A2E] font-mono text-xs">05 /</span>
-              <h2 className="font-sans font-black text-xs uppercase tracking-widest text-foreground">Leadership & Vetting Team</h2>
+              <span className="text-[#C59A2E] font-mono text-xs font-bold">05 /</span>
+              <h2 className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-foreground">Leadership & Vetting Team</h2>
               <div className="flex-1 h-px bg-border" />
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="p-6 border border-border bg-card">
-                <h4 className="font-sans font-bold text-sm uppercase tracking-wider text-foreground mb-1">Founding Board & Editorial Lead</h4>
+                <h4 className="font-mono font-bold text-xs uppercase tracking-wider text-foreground mb-2">Founding Board & Editorial Lead</h4>
                 <p className="text-xs text-muted-foreground font-serif leading-relaxed mb-4">
                   Led by experienced startup researchers and product engineers committed to institutional data integrity across global ecosystems.
                 </p>
@@ -289,7 +288,7 @@ export default async function AboutPage() {
               </div>
 
               <div className="p-6 border border-border bg-card">
-                <h4 className="font-sans font-bold text-sm uppercase tracking-wider text-foreground mb-1">Research & Review Panel</h4>
+                <h4 className="font-mono font-bold text-xs uppercase tracking-wider text-foreground mb-2">Research & Review Panel</h4>
                 <p className="text-xs text-muted-foreground font-serif leading-relaxed mb-4">
                   Our analyst team evaluates incoming submissions against official MCA, corporate registry, and public dataset sources within 3-5 business days.
                 </p>
@@ -298,31 +297,25 @@ export default async function AboutPage() {
                 </div>
               </div>
             </div>
-
-            {/* FOUNDER DATA PLACEHOLDER COMMENT */}
-            {/* <!-- NEEDS REAL DATA: founder full names, LinkedIn profiles, and review board details to be updated by founder --> */}
-            {/* <!-- DOMAIN COMPARISON COMMENT: .org presents global startup registry framing whereas .in presents India-focused registry framing --> */}
           </Reveal>
 
           {/* 7. CONTACT & LEGAL TRANSPARENCY */}
           <Reveal as="section">
             <div className="flex items-center gap-3 mb-8">
-              <span className="text-[#C59A2E] font-mono text-xs">06 /</span>
-              <h2 className="font-sans font-black text-xs uppercase tracking-widest text-foreground">Legal & Operational Transparency</h2>
+              <span className="text-[#C59A2E] font-mono text-xs font-bold">06 /</span>
+              <h2 className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-foreground">Legal & Operational Transparency</h2>
               <div className="flex-1 h-px bg-border" />
             </div>
 
-            <div className="grid sm:grid-cols-3 gap-6 p-8 border border-border bg-muted/20">
+            <div className="grid sm:grid-cols-3 gap-6 p-8 border border-border bg-muted/30">
               <div>
                 <span className="text-[10px] font-mono font-bold uppercase text-muted-foreground block mb-1">Operating Entity</span>
                 <p className="text-sm font-bold font-serif text-foreground">UpForge Global Registry</p>
-                {/* <!-- NEEDS REAL DATA: official registered corporate entity name --> */}
               </div>
 
               <div>
                 <span className="text-[10px] font-mono font-bold uppercase text-muted-foreground block mb-1">Jurisdiction</span>
                 <p className="text-sm font-bold font-serif text-foreground">India & International Operations</p>
-                {/* <!-- NEEDS REAL DATA: legal registration jurisdiction --> */}
               </div>
 
               <div>
@@ -337,19 +330,19 @@ export default async function AboutPage() {
           {/* 8. FAQ ACCORDION */}
           <Reveal as="section">
             <div className="flex items-center gap-3 mb-8">
-              <span className="text-[#C59A2E] font-mono text-xs">07 /</span>
-              <h2 className="font-sans font-black text-xs uppercase tracking-widest text-foreground">Frequently Asked Questions</h2>
+              <span className="text-[#C59A2E] font-mono text-xs font-bold">07 /</span>
+              <h2 className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-foreground">Frequently Asked Questions</h2>
               <div className="flex-1 h-px bg-border" />
             </div>
 
             <div className="space-y-4">
               {FAQ_ITEMS.map((item, i) => (
-                <details key={i} className="group border border-border p-4 bg-background">
-                  <summary className="font-sans font-bold text-xs uppercase tracking-wider cursor-pointer flex justify-between items-center text-foreground">
+                <details key={i} className="group border border-border p-4 bg-card cursor-pointer">
+                  <summary className="font-mono font-bold text-xs uppercase tracking-wider flex justify-between items-center text-foreground">
                     <span>{item.q}</span>
-                    <span className="text-[#C59A2E] group-open:rotate-180 transition-transform">↓</span>
+                    <span className="text-[#C59A2E] group-open:rotate-180 transition-transform font-mono text-sm">↓</span>
                   </summary>
-                  <p className="text-xs text-muted-foreground mt-3 leading-relaxed font-serif">
+                  <p className="text-xs md:text-sm text-muted-foreground mt-3 leading-relaxed font-serif pt-2 border-t border-border/40">
                     {item.a}
                   </p>
                 </details>
@@ -358,9 +351,11 @@ export default async function AboutPage() {
           </Reveal>
 
           {/* 9. CLOSING CTA */}
-          <section className="text-center p-10 border border-foreground bg-muted/40">
-            <h2 className="text-2xl sm:text-3xl font-bold font-serif mb-3">Build Your Verified Public Record Today</h2>
-            <p className="text-xs text-muted-foreground max-w-xl mx-auto mb-6">
+          <section className="text-center p-8 md:p-12 border-2 border-foreground bg-card shadow-sm">
+            <h2 className="text-2xl sm:text-3xl font-bold font-serif mb-3 text-foreground" style={{ fontFamily: "'Georgia', serif" }}>
+              Build Your Verified Public Record Today
+            </h2>
+            <p className="text-xs md:text-sm text-muted-foreground max-w-xl mx-auto mb-6 font-serif">
               Join thousands of founders and companies establishing standardized digital credibility on UpForge.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -368,7 +363,7 @@ export default async function AboutPage() {
                 href="/submit"
                 className="px-8 py-3.5 bg-foreground hover:bg-[#C59A2E] text-background font-mono text-xs uppercase tracking-widest font-bold transition-colors"
               >
-                Submit Your Startup
+                Submit Your Startup Free
               </Link>
               <Link
                 href="/partner-program"
@@ -384,3 +379,4 @@ export default async function AboutPage() {
     </>
   )
 }
+
