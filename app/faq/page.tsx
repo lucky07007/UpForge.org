@@ -22,7 +22,7 @@ export const FAQ_CATEGORIES = [
     questions: [
       {
         q: "How do I list my startup on UpForge?",
-        a: "Go to upforge.in/submit and fill in your startup details — name, founder, industry, description, and founding year are required. The form takes under 5 minutes. Once submitted, our team reviews and verifies your profile within 3–7 business days. Listing is completely free and always will be.",
+        a: "Go to upforge.org/submit and fill in your startup details — name, founder, industry, description, and founding year are required. The form takes under 5 minutes. Once submitted, our team reviews and verifies your profile within 3–7 business days. Listing is completely free and always will be.",
       },
       {
         q: "Is listing on UpForge really free?",
@@ -34,7 +34,7 @@ export const FAQ_CATEGORIES = [
       },
       {
         q: "Can I edit my startup profile after it's listed?",
-        a: "Yes. Email corrections@upforge.in with your startup name and UFRN and the changes you'd like made. We'll update the profile within 48 hours. For major updates — new funding round, rebranding, new product — we recommend re-requesting full verification.",
+        a: "Yes. Email support@upforge.org with your startup name and UFRN and the changes you'd like made. We'll update the profile within 48 hours. For major updates — new funding round, rebranding, new product — we recommend re-requesting full verification.",
       },
       {
         q: "How long does listing approval take?",
@@ -42,7 +42,7 @@ export const FAQ_CATEGORIES = [
       },
       {
         q: "Can a startup be removed from UpForge?",
-        a: "Yes. If a startup has shut down, or a founder requests removal with valid verification, we will delist the profile. Email contact@upforge.in. We maintain corrections and removals as part of our editorial standards.",
+        a: "Yes. If a startup has shut down, or a founder requests removal with valid verification, we will delist the profile. Email support@upforge.org. We maintain corrections and removals as part of our editorial standards.",
       },
     ],
   },
@@ -83,21 +83,21 @@ export const FAQ_CATEGORIES = [
   {
     id: "valuation",
     rank: "04",
-    label: "Valuation Tool",
+    label: "Valuation & Analytics",
     category: "Finance",
     icon: Calculator,
     questions: [
       {
-        q: "How does the UpForge valuation estimator work?",
-        a: "The free tool at upforge.in/valuation takes inputs like industry, revenue stage, team size, funding raised, and growth metrics — and applies sector-appropriate multiples benchmarked against real startup deals globally. It gives you a floor, midpoint, and ceiling estimate with methodology explained. No signup required.",
+        q: "How does UpForge evaluate startup analytics?",
+        a: "The compare and evaluation models at upforge.org/compare take inputs like industry, revenue stage, team size, funding raised, and growth metrics — and apply sector-appropriate multiples benchmarked against real startup deals globally. It gives you a floor, midpoint, and ceiling estimate with methodology explained.",
       },
       {
-        q: "What valuation methods does UpForge use?",
+        q: "What valuation methods does UpForge benchmark?",
         a: "ARR multiples (8–25x) for SaaS and subscription businesses, GMV multiples (0.5–3x) for marketplace and commerce platforms, revenue multiples (1–5x) for D2C and product companies, and cost-to-duplicate models for pre-revenue startups.",
       },
       {
         q: "Is the valuation legally binding?",
-        a: "No. The UpForge valuation is an indicative estimate for strategic use — not a formal valuation for legal, tax, or fundraising documentation. For statutory valuations (ESOP, FEMA compliance, M&A), you need a SEBI-registered valuer or CA.",
+        a: "No. UpForge estimates are indicative for strategic research and benchmarking — not a formal valuation for legal, tax, or fundraising documentation. For statutory valuations (ESOP, FEMA compliance, M&A), you need a SEBI-registered valuer or CA.",
       },
     ],
   },
@@ -126,7 +126,7 @@ export const FAQ_CATEGORIES = [
       },
       {
         q: "Can investors or researchers access UpForge data in bulk?",
-        a: "We're building API and bulk data access for verified investors, researchers, and institutions. If you're interested in early access, email data@upforge.in with your use case. Individual profiles are already public and accessible via the registry.",
+        a: "We're building API and bulk data access for verified investors, researchers, and institutions. If you're interested in early access, email partners@upforge.org with your use case. Individual profiles are already public and accessible via the registry.",
       },
     ],
   },
